@@ -20,6 +20,14 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
+        // dotenv-expand mangles unescaped $ in .env.local — escape as \$2b\$12\$…
+        if (!/^\$2[aby]?\$\d{2}\$/.test(passwordHash)) {
+          console.error(
+            "[auth] ADMIN_PASSWORD_HASH is invalid (often dotenv $ expansion). Escape as \\$2b\\$12\\$… in .env.local.",
+          );
+          return null;
+        }
+
         if (email !== adminEmail) {
           return null;
         }
