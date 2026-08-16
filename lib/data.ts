@@ -67,6 +67,7 @@ export const values: LocalizedText[] = [
 export const projects: Project[] = [
   {
     slug: "iris-software",
+    image: "/images/projects/iris-software.png",
     title: "IRIS Software",
     category: "Platforms",
     year: "2026",
@@ -99,6 +100,7 @@ export const projects: Project[] = [
   },
   {
     slug: "ecop-morocco",
+    image: "/images/projects/ecop-morocco.png",
     title: "ECOP Morocco",
     category: "EdTech",
     year: "2025",
@@ -131,9 +133,11 @@ export const projects: Project[] = [
   },
   {
     slug: "africeduc",
+    image: "/images/projects/africeduc.png",
     title: "AfricEduc Learning Platform",
     category: "EdTech",
     year: "2025",
+    client: "Ed Manar",
     featured: true,
     summary: {
       en: "A comprehensive e-learning platform connecting students across Africa with quality educational content, interactive courses and expert instructors.",
@@ -148,11 +152,11 @@ export const projects: Project[] = [
       fr: "Développée avec React et Next.js côté frontend, Node.js et PostgreSQL côté backend, avec des stratégies de cache avancées et une diffusion média optimisée pour un chargement rapide même sur des connexions lentes.",
     },
     impact: {
-      en: "Onboarded 50,000+ students with an 85% engagement rate and a 4.8/5 satisfaction score — becoming a leading educational resource across several African countries.",
-      fr: "Plus de 50 000 étudiants inscrits, un taux d'engagement de 85 % et une note de satisfaction de 4,8/5 : devenue une ressource éducative de référence dans plusieurs pays africains.",
+      en: "Onboarded 10,000+ users with an 85% engagement rate and a 4.8/5 satisfaction score — becoming a leading educational resource across several African countries.",
+      fr: "Plus de 10 000 utilisateurs inscrits, un taux d'engagement de 85 % et une note de satisfaction de 4,8/5 : devenue une ressource éducative de référence dans plusieurs pays africains.",
     },
     metrics: [
-      { value: "50K+", label: { en: "Students onboarded", fr: "Étudiants inscrits" } },
+      { value: "10K+", label: { en: "Users onboarded", fr: "Utilisateurs inscrits" } },
       { value: "85%", label: { en: "Engagement rate", fr: "Taux d'engagement" } },
       { value: "4.8/5", label: { en: "Satisfaction score", fr: "Score de satisfaction" } },
     ],
@@ -161,6 +165,7 @@ export const projects: Project[] = [
   },
   {
     slug: "digital-ln-marketplace",
+    image: "/images/projects/digital-ln-marketplace.png",
     title: "Digital LN Marketplace",
     category: "Platforms",
     year: "2025",
@@ -190,6 +195,7 @@ export const projects: Project[] = [
   },
   {
     slug: "solaragrobot",
+    image: "/images/projects/solaragrobot.png",
     title: "SolarAgroBot",
     category: "Innovation",
     year: "2023 – 2024",
@@ -226,6 +232,7 @@ export const projects: Project[] = [
   },
   {
     slug: "uib-innovation-branding",
+    image: "/images/projects/uib-innovation-branding.png",
     title: "UIB Innovation — Branding",
     category: "Branding",
     year: "2025",
@@ -238,6 +245,7 @@ export const projects: Project[] = [
   },
   {
     slug: "afric-educ-branding",
+    image: "/images/projects/afric-educ-branding.png",
     title: "AFRIC EDUC — Branding",
     category: "Branding",
     year: "2025",
@@ -250,15 +258,87 @@ export const projects: Project[] = [
   },
   {
     slug: "mt180-maroc",
+    image: "/images/projects/mt180-maroc.png",
     title: "Ma Thèse en 180 Secondes — Maroc",
     category: "Innovation",
-    year: "2025",
+    year: "2022",
     summary: {
       en: "Graphic and digital content creation for the MT180 scientific communication competition in Morocco.",
       fr: "Création de contenus graphiques et digitaux pour la compétition scientifique Ma Thèse en 180 Secondes (MT180) au Maroc.",
     },
     tech: ["Figma", "Adobe Illustrator"],
     tags: ["Science", "EdTech", "Communication"],
+  },
+  {
+    slug: "yedart",
+    image: "/images/projects/yedart.png",
+    title: "YEDART",
+    category: "Platforms",
+    year: "2026",
+    client: "RAMO CONSULTING SARL",
+    featured: true,
+    summary: {
+      en: "An international e-commerce platform bringing Moroccan craftsmanship — rugs, zellige, pottery — to B2C and B2B buyers worldwide.",
+      fr: "Une plateforme e-commerce internationale qui fait rayonner l'artisanat marocain — tapis, zellige, poterie — auprès d'acheteurs B2C et B2B à travers le monde.",
+    },
+    challenge: {
+      en: "Moroccan artisans and workshops had strong craftsmanship but no direct channel to international buyers, and needed a platform handling both individual retail orders and larger B2B wholesale requests.",
+      fr: "Les artisans et ateliers marocains disposaient d'un savoir-faire fort mais d'aucun canal direct vers les acheteurs internationaux, et avaient besoin d'une plateforme capable de gérer aussi bien les commandes de détail que les demandes B2B en gros volume.",
+    },
+    solution: {
+      en: "Built on Next.js 16 and React 19, with a Prisma/MongoDB catalog, Stripe for secure international payments and Cloudinary for rich product imagery — covering both consumer checkout and dedicated B2B request flows.",
+      fr: "Construite avec Next.js 16 et React 19, un catalogue Prisma/MongoDB, Stripe pour les paiements internationaux sécurisés et Cloudinary pour une imagerie produit riche — couvrant à la fois le paiement grand public et des parcours B2B dédiés.",
+    },
+    impact: {
+      en: "Gave a Moroccan consulting firm's artisan network a direct, professional storefront to reach international markets — a first digital sales channel for several of the workshops involved.",
+      fr: "A donné au réseau d'artisans d'un cabinet de conseil marocain une vitrine digitale professionnelle et directe vers les marchés internationaux — un premier canal de vente digital pour plusieurs des ateliers concernés.",
+    },
+    tech: ["Next.js 16", "React 19", "MongoDB", "Prisma ORM", "Stripe", "Cloudinary"],
+    tags: ["E-Commerce", "Artisanat", "International", "B2B"],
+  },
+  {
+    slug: "choufon",
+    image: "/images/projects/choufon.png",
+    title: "Choufon",
+    category: "Innovation",
+    year: "2025",
+    summary: {
+      en: "An augmented-reality menu SaaS for restaurants — diners preview dishes in 3D/AR and order by QR code, across multiple venues.",
+      fr: "Un SaaS de menus en réalité augmentée pour restaurants — les clients visualisent les plats en 3D/AR et commandent par QR code, sur plusieurs établissements.",
+    },
+    solution: {
+      en: "A multi-tenant platform letting restaurant groups manage 3D/AR dishes and QR-code ordering across every venue from one dashboard, built with Next.js and React.",
+      fr: "Une plateforme multi-établissements permettant aux groupes de restaurants de gérer des plats en 3D/AR et la commande par QR code sur tous leurs points de vente depuis un seul tableau de bord, développée en Next.js et React.",
+    },
+    tech: ["Next.js", "React", "3D/AR"],
+    tags: ["SaaS", "Restauration", "AR/3D"],
+  },
+  {
+    slug: "butconsult",
+    image: "/images/projects/butconsult.png",
+    title: "ButConsult",
+    category: "Platforms",
+    year: "2025",
+    summary: {
+      en: "A B2B digital ecosystem for an Industry 4.0 consulting firm, structuring 18 solutions across 9 practice areas into one coherent platform.",
+      fr: "Un écosystème digital B2B pour un cabinet de conseil Industrie 4.0, structurant 18 solutions réparties en 9 pôles au sein d'une plateforme cohérente.",
+    },
+    tech: ["Next.js", "React"],
+    tags: ["B2B", "Consulting", "Industrie 4.0"],
+  },
+  {
+    slug: "petits-debrouillards-maroc",
+    image: "/images/projects/petits-debrouillards.png",
+    title: "Les Petits Débrouillards Maroc",
+    category: "EdTech",
+    year: "2026",
+    client: "Association Marocaine des Petits Débrouillards",
+    summary: {
+      en: "A cinematic showcase website for Morocco's science-outreach association — staging the association's 40 years of presence in Morocco, its activities, lab programs and news in a full-bleed, animated design.",
+      fr: "Site vitrine cinématique pour l'association marocaine de médiation scientifique — mettant en scène 40 ans de présence de l'association au Maroc, ses activités, le programme du Labo et ses actualités, dans un design plein cadre et animé.",
+    },
+    tech: [],
+    tags: ["EdTech", "Association", "Science", "Maroc"],
   },
 ];
 
@@ -323,7 +403,7 @@ export const experience: ExperienceItem[] = [
   {
     role: { en: "Founder & CEO", fr: "Fondateur & CEO" },
     org: "Netnook",
-    period: { en: "2024 — Present", fr: "2024 — Présent" },
+    period: { en: "2023 — Present", fr: "2023 — Présent" },
     location: "Salé, Maroc",
     current: true,
     description: {
@@ -349,9 +429,9 @@ export const experience: ExperienceItem[] = [
   {
     role: { en: "Technical Support Lead", fr: "Responsable Support Technique" },
     org: "ECOP Morocco",
-    period: { en: "2023 — Present", fr: "2023 — Présent" },
+    period: { en: "2023 — 2025", fr: "2023 — 2025" },
     location: "Maroc",
-    current: true,
+    current: false,
     description: {
       en: "Lead the technical platform behind ECOP Morocco's ocean advocacy network, from secure infrastructure to cybersecurity training for young ocean professionals.",
       fr: "Responsable technique de la plateforme d'ECOP Morocco, du réseau océanique à la formation des jeunes professionnels de l'océan en cybersécurité.",
@@ -426,9 +506,9 @@ export const experience: ExperienceItem[] = [
   {
     role: { en: "Student Entrepreneur", fr: "Étudiant-Entrepreneur" },
     org: "Mohammed V University",
-    period: { en: "2023 — Present", fr: "2023 — Présent" },
+    period: { en: "2022 — 2024", fr: "2022 — 2024" },
     location: "Rabat, Maroc",
-    current: true,
+    current: false,
     description: {
       en: "Official student-entrepreneur at Mohammed V University, developing innovation projects alongside academic studies with support from the university's entrepreneurship center.",
       fr: "Étudiant-entrepreneur officiel à l'Université Mohammed V, développement de projets innovants en parallèle des études avec le soutien du centre d'entrepreneuriat universitaire.",
@@ -454,7 +534,7 @@ export const education: EducationItem[] = [
       fr: "Licence en Sciences Mathématiques et Informatique",
     },
     school: "Mohammed V University of Rabat",
-    period: { en: "2020 — Present", fr: "2020 — Présent" },
+    period: { en: "2020 — 2024", fr: "2020 — 2024" },
     details: [
       {
         en: "Specialization in advanced algorithms, artificial intelligence and computer security.",
@@ -472,7 +552,7 @@ export const education: EducationItem[] = [
       fr: "Baccalauréat Sciences Mathématiques",
     },
     school: "Mohammed Jamal Dorra High School, Salé",
-    period: { en: "2020", fr: "2020" },
+    period: { en: "2019", fr: "2019" },
     details: [
       {
         en: "Obtained with honors, specialization in mathematics and physical sciences.",
@@ -498,10 +578,17 @@ export const certifications: string[] = [
   "Full-Stack Web Development",
 ];
 
+/** ENGAGEMENT ASSOCIATIF — réseaux entrepreneuriaux et bénévolat */
+export const associations: string[] = [
+  "Enactus",
+  "STARTGATE (UM6P)",
+  "Climate Fresk — Facilitateur",
+];
+
 /** Stats bar — chiffres vérifiés (CV + projets livrés) */
 export const stats: StatItem[] = [
   { value: experienceYears, suffix: "+", label: { en: "Years of experience", fr: "Ans d'expérience" } },
-  { value: 7, suffix: "+", label: { en: "Projects delivered", fr: "Projets livrés" } },
-  { value: 60, suffix: "K+", label: { en: "Users impacted", fr: "Utilisateurs impactés" } },
+  { value: 12, suffix: "+", label: { en: "Projects delivered", fr: "Projets livrés" } },
+  { value: 20, suffix: "K+", label: { en: "Users impacted", fr: "Utilisateurs impactés" } },
   { value: 50, suffix: "%", label: { en: "Avg. efficiency gain", fr: "Gain d'efficacité moyen" } },
 ];

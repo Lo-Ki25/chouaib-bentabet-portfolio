@@ -1,25 +1,38 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { Download, Quote } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { profile, missionStatement, values, CAREER_START_YEAR } from "@/lib/data";
+import { useFinePointer } from "@/hooks/useFinePointer";
+import { useTabVisible } from "@/hooks/useTabVisible";
 import AnimatedSection from "./ui/AnimatedSection";
 import SectionHeading from "./ui/SectionHeading";
 
 export default function About() {
   const { dict, lang } = useLanguage();
   const prefersReducedMotion = useReducedMotion();
+  const finePointer = useFinePointer();
+  const tabVisible = useTabVisible();
   const [avatarFailed, setAvatarFailed] = useState(false);
+  const [logoFailed, setLogoFailed] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const glassRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: glassRef,
+    offset: ["start end", "end start"],
+  });
+  const parallaxY = useTransform(scrollYProgress, [0, 1], [36, -36]);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
   const canAnimate = mounted && !prefersReducedMotion;
+  const canFloat = canAnimate && tabVisible && finePointer;
 
   const showAvatar = Boolean(profile.avatar) && !avatarFailed;
   const showCv = Boolean(profile.cvUrl);
@@ -84,13 +97,43 @@ export default function About() {
           </div>
 
           <AnimatedSection direction="right" delay={0.15} className="relative min-w-0">
-            <div className="glass card-border relative overflow-hidden rounded-3xl p-5 shadow-card sm:p-8">
+            <motion.div
+              ref={glassRef}
+              style={canAnimate ? { y: parallaxY } : undefined}
+              className="relative mb-6 overflow-hidden rounded-3xl border border-white/10 shadow-card"
+            >
+              <motion.div
+                {...(canFloat
+                  ? {
+                      animate: { y: [0, -14, 0] },
+                      transition: { duration: 8, repeat: Infinity, ease: "easeInOut" as const },
+                    }
+                  : {})}
+                className="relative aspect-square will-change-transform"
+              >
+                {/* Rendu uniquement après montage : même mismatch d'hydratation
+                    que pour l'image du Hero (next/image + fill). Purement
+                    décoratif (alt vide), retarder d'un tick est invisible. */}
+                {mounted ? (
+                  <Image
+                    src="/images/about-glass.png"
+                    alt=""
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 480px"
+                    className="object-cover"
+                  />
+                ) : null}
+                <div className="absolute inset-0 bg-gradient-to-t from-base-900/70 via-transparent to-base-900/20" />
+              </motion.div>
+            </motion.div>
+
+            <div className="glass card-border relative overflow-hidden rounded-3xl p-5 shadow-card sm:p-8 lg:-mt-16">
               <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-accent-500/20 blur-3xl" />
               <div className="relative flex flex-col items-center text-center">
                 {/*
                   Profile photo: set profile.avatar in lib/data.ts after dropping
                   the image at public/avatar.jpg (square crop, ≥112×112).
-                  Falls back to CB initials when null or if the image fails to load.
+                  Falls back to /logo-cb.png, then to CB initials if that fails.
                 */}
                 <motion.div
                   {...(canAnimate
@@ -111,6 +154,15 @@ export default function About() {
                       className="h-28 w-28 rounded-full object-cover shadow-glow"
                       priority
                       onError={() => setAvatarFailed(true)}
+                    />
+                  ) : !logoFailed ? (
+                    <Image
+                      src="/logo-cb.png"
+                      alt={profile.name}
+                      width={112}
+                      height={112}
+                      className="h-28 w-28 rounded-full object-cover shadow-glow"
+                      onError={() => setLogoFailed(true)}
                     />
                   ) : (
                     <div className="flex h-28 w-28 items-center justify-center rounded-full bg-gradient-to-br from-accent-400 via-accent-500 to-violet font-display text-4xl font-bold text-white shadow-glow">

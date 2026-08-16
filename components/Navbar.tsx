@@ -1,31 +1,61 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Menu, X, Languages } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { useIntro } from "@/components/BrandIntro";
+import PillButton from "@/components/ui/PillButton";
+import { useLenisInstance } from "@/components/SmoothScrollProvider";
 import { profile } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
-const sections: { id: string; key: "home" | "about" | "skills" | "experience" | "projects" | "contact" }[] = [
+type NavKey = "home" | "about" | "services" | "projects" | "contact";
+
+const navLinks: { id: string; key: NavKey }[] = [
   { id: "home", key: "home" },
   { id: "about", key: "about" },
-  { id: "skills", key: "skills" },
-  { id: "experience", key: "experience" },
+  { id: "services", key: "services" },
   { id: "projects", key: "projects" },
   { id: "contact", key: "contact" },
 ];
+
+const scrollSections = [
+  ...navLinks.map((l) => l.id),
+  "transformation",
+  "cybersecurity",
+  "skills",
+  "marketDesign",
+  "experience",
+];
+
+const hiddenSectionNavMap: Record<string, NavKey> = {
+  transformation: "services",
+  cybersecurity: "services",
+  skills: "about",
+  marketDesign: "projects",
+  experience: "about",
+};
+
+function resolveActiveNavId(sectionId: string): string {
+  if (navLinks.some((l) => l.id === sectionId)) return sectionId;
+  return hiddenSectionNavMap[sectionId] ?? sectionId;
+}
 
 export default function Navbar() {
   const { dict, lang, toggleLang } = useLanguage();
   const prefersReducedMotion = useReducedMotion();
   const pathname = usePathname();
   const router = useRouter();
+  const lenis = useLenisInstance();
+  const { showIntro } = useIntro();
   const [mounted, setMounted] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const [logoFailed, setLogoFailed] = useState(false);
   const isHome = pathname === "/";
 
   useEffect(() => {
@@ -42,8 +72,8 @@ export default function Navbar() {
   useEffect(() => {
     if (!isHome) return;
 
-    const sectionElements = sections
-      .map((s) => document.getElementById(s.id))
+    const sectionElements = scrollSections
+      .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => el !== null);
 
     if (sectionElements.length === 0) return;
@@ -65,7 +95,6 @@ export default function Navbar() {
     return () => observer.disconnect();
   }, [isHome]);
 
-  // Body scroll lock + Escape when mobile menu is open
   useEffect(() => {
     if (!open) return;
     const prev = document.body.style.overflow;
@@ -80,7 +109,6 @@ export default function Navbar() {
     };
   }, [open]);
 
-  // Close menu when switching to desktop breakpoint
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 1024px)");
     const onChange = () => {
@@ -99,45 +127,59 @@ export default function Navbar() {
     }
 
     const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({
-        behavior: prefersReducedMotion ? "auto" : "smooth",
-        block: "start",
-      });
+    if (!el) return;
+
+    if (lenis && !prefersReducedMotion) {
+      lenis.scrollTo(el, { offset: 0 });
+      return;
     }
+
+    el.scrollIntoView({
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+      block: "start",
+    });
   };
+
+  const activeNavId = resolveActiveNavId(activeSection);
 
   const navLinkClass = (id: string, mobile = false) =>
     cn(
       mobile
         ? "touch-target flex w-full items-center rounded-xl px-4 py-3.5 text-left text-base font-medium transition-colors"
-        : "rounded-full px-4 py-2 text-sm font-medium transition-colors",
-      isHome && activeSection === id
+        : "relative shrink-0 whitespace-nowrap rounded-full px-2.5 py-1.5 text-xs font-medium transition-colors xl:px-3 xl:text-sm",
+      isHome && activeNavId === id
         ? "bg-accent-500/15 text-white"
         : "text-muted hover:bg-white/5 hover:text-white"
     );
 
-  const headerMotion =
-    mounted && !prefersReducedMotion
-      ? {
-          initial: { y: -80, opacity: 0 },
-          animate: { y: 0, opacity: 1 },
-          transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
-        }
-      : {};
+  const headerClassName = cn(
+    "fixed inset-x-0 top-0 z-50 safe-top py-2 transition-all duration-300"
+  );
 
-  return (
-    <motion.header
-      {...headerMotion}
-      className={cn(
-        "fixed inset-x-0 top-0 z-50 safe-top transition-all duration-300",
-        scrolled ? "py-2 sm:py-3" : "py-3 sm:py-5"
-      )}
-    >
+  const monogramClassName =
+    "relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-accent-400 to-violet text-sm font-bold text-white shadow-glow-sm";
+
+  const renderMonogramContent = () =>
+    logoFailed ? (
+      profile.initials
+    ) : (
+      <Image
+        src="/logo-cb.png"
+        alt={profile.initials}
+        width={36}
+        height={36}
+        className="h-9 w-9 rounded-xl object-cover"
+        onError={() => setLogoFailed(true)}
+        priority
+      />
+    );
+
+  const headerInner: ReactNode = (
+    <>
       <div className="mx-auto max-w-6xl px-page">
         <div
           className={cn(
-            "flex items-center justify-between rounded-2xl border px-3 py-2.5 transition-all duration-300 sm:px-4 sm:py-3",
+            "grid grid-cols-[auto_1fr_auto] items-center gap-2 rounded-2xl border px-3 py-2 transition-all duration-300 sm:px-4 lg:grid-cols-[1fr_auto_1fr]",
             scrolled
               ? "glass card-border shadow-card"
               : "border-transparent bg-transparent"
@@ -146,18 +188,31 @@ export default function Navbar() {
           <button
             onClick={() => handleNavigate("home")}
             data-cursor-hover
-            className="touch-target flex min-w-0 items-center gap-2 font-display text-lg font-bold text-white sm:gap-2.5"
+            className="touch-target flex min-w-0 items-center gap-2 font-display text-base font-bold text-white sm:gap-2.5 sm:text-lg"
           >
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-accent-400 to-violet text-sm font-bold text-white shadow-glow-sm">
-              {profile.initials}
-            </span>
+            {showIntro ? (
+              <span className={cn(monogramClassName, "opacity-0")} aria-hidden>
+                {renderMonogramContent()}
+              </span>
+            ) : (
+              <motion.span
+                layoutId="brand-monogram"
+                className={monogramClassName}
+                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+              >
+                {renderMonogramContent()}
+              </motion.span>
+            )}
             <span className="hidden truncate sm:inline">
               Chouaib<span className="text-accent-400">.</span>
             </span>
           </button>
 
-          <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
-            {sections.map((s) => (
+          <nav
+            className="hidden min-w-0 flex-nowrap items-center justify-center gap-0.5 lg:flex xl:gap-1"
+            aria-label="Primary"
+          >
+            {navLinks.map((s) => (
               <button
                 key={s.id}
                 data-cursor-hover
@@ -165,28 +220,35 @@ export default function Navbar() {
                 className={navLinkClass(s.id)}
               >
                 {dict.nav[s.key]}
+                {isHome && activeNavId === s.id ? (
+                  <motion.span
+                    layoutId="nav-underline"
+                    className="absolute inset-x-2 -bottom-0.5 h-0.5 rounded-full bg-accent-400"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                ) : null}
               </button>
             ))}
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-end gap-1.5 sm:gap-2">
             <button
               onClick={toggleLang}
               data-cursor-hover
               aria-label={lang === "fr" ? "Passer en anglais" : "Switch to French"}
-              className="touch-target inline-flex items-center gap-1.5 rounded-full border border-white/10 px-2.5 py-2 text-xs font-semibold uppercase tracking-wide text-muted transition-colors hover:border-accent-500/40 hover:text-white active:bg-white/5 sm:px-3"
+              className="touch-target inline-flex items-center gap-1.5 rounded-full border border-white/10 px-2 py-1.5 text-xs font-semibold uppercase tracking-wide text-muted transition-colors hover:border-accent-500/40 hover:text-white active:bg-white/5 sm:px-2.5"
             >
               <Languages className="h-3.5 w-3.5" />
               {lang === "fr" ? "FR" : "EN"}
             </button>
 
-            <button
+            <PillButton
               onClick={() => handleNavigate("contact")}
-              data-cursor-hover
-              className="hidden rounded-full bg-gradient-to-r from-accent-500 to-violet px-5 py-2.5 text-sm font-semibold text-white shadow-glow-sm transition-transform hover:scale-105 active:scale-[0.98] sm:inline-flex"
+              variant="solid"
+              className="hidden px-4 py-2 sm:inline-flex"
             >
               {dict.nav.cta}
-            </button>
+            </PillButton>
 
             <button
               onClick={() => setOpen((v) => !v)}
@@ -238,9 +300,7 @@ export default function Navbar() {
                 data-cursor-hover
                 className="touch-target flex items-center gap-2.5 font-display text-lg font-bold text-white"
               >
-                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-accent-400 to-violet text-sm font-bold text-white shadow-glow-sm">
-                  {profile.initials}
-                </span>
+                <span className={monogramClassName}>{renderMonogramContent()}</span>
                 <span>
                   Chouaib<span className="text-accent-400">.</span>
                 </span>
@@ -256,7 +316,7 @@ export default function Navbar() {
             </div>
 
             <nav className="flex flex-1 flex-col justify-center gap-1 overflow-y-auto px-page py-6">
-              {sections.map((s, i) => (
+              {navLinks.map((s, i) => (
                 <motion.button
                   key={s.id}
                   {...(prefersReducedMotion
@@ -284,17 +344,36 @@ export default function Navbar() {
                 <Languages className="h-4 w-4" />
                 {lang === "fr" ? "FR → EN" : "EN → FR"}
               </button>
-              <button
+              <PillButton
                 onClick={() => handleNavigate("contact")}
-                data-cursor-hover
-                className="touch-target inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-accent-500 to-violet px-6 text-sm font-semibold text-white shadow-glow-sm"
+                variant="solid"
+                className="w-full"
               >
                 {dict.nav.cta}
-              </button>
+              </PillButton>
             </div>
           </motion.div>
         ) : null}
       </AnimatePresence>
+    </>
+  );
+
+  if (!mounted) {
+    return <header className={headerClassName}>{headerInner}</header>;
+  }
+
+  return (
+    <motion.header
+      {...(prefersReducedMotion
+        ? {}
+        : {
+            initial: { y: -80, opacity: 0 },
+            animate: { y: 0, opacity: 1 },
+            transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
+          })}
+      className={headerClassName}
+    >
+      {headerInner}
     </motion.header>
   );
 }

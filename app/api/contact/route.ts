@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
-import { serverContactSchema } from "@/lib/contactSchema";
+import {
+  NEED_TYPE_EMAIL_LABELS,
+  PREFERRED_TIME_EMAIL_LABELS,
+  serverContactSchema,
+} from "@/lib/contactSchema";
 import { escapeHtml } from "@/lib/escapeHtml";
 
 export async function POST(request: Request) {
@@ -13,7 +17,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: firstError }, { status: 400 });
     }
 
-    const { name, email, message } = parsed.data;
+    const { name, email, message, needType, preferredTime } = parsed.data;
     const apiKey = process.env.RESEND_API_KEY;
 
     if (!apiKey) {
@@ -32,8 +36,13 @@ export async function POST(request: Request) {
     const from =
       process.env.CONTACT_FROM_EMAIL ?? "Portfolio <onboarding@resend.dev>";
 
+    const needLabel = NEED_TYPE_EMAIL_LABELS[needType];
+    const timeLabel = PREFERRED_TIME_EMAIL_LABELS[preferredTime];
+
     const safeName = escapeHtml(name);
     const safeEmail = escapeHtml(email);
+    const safeNeed = escapeHtml(needLabel);
+    const safeTime = escapeHtml(timeLabel);
     const safeMessage = escapeHtml(message).replace(/\n/g, "<br />");
 
     const { error } = await resend.emails.send({
@@ -41,8 +50,10 @@ export async function POST(request: Request) {
       to: [to],
       replyTo: email,
       subject: `Portfolio contact — ${name}`,
-      text: `${message}\n\n— ${name} (${email})`,
+      text: `Need: ${needLabel}\nPreferred time: ${timeLabel}\n\n${message}\n\n— ${name} (${email})`,
       html: `
+        <p><strong>Need:</strong> ${safeNeed}</p>
+        <p><strong>Preferred time:</strong> ${safeTime}</p>
         <p>${safeMessage}</p>
         <hr />
         <p><strong>${safeName}</strong> &lt;${safeEmail}&gt;</p>

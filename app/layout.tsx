@@ -3,7 +3,12 @@ import { Sora, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/context/LanguageContext";
 import MotionProvider from "@/components/MotionProvider";
+import SmoothScrollProvider from "@/components/SmoothScrollProvider";
 import SmoothCursor from "@/components/SmoothCursor";
+import GridSpotlight from "@/components/GridSpotlight";
+import BrandIntro from "@/components/BrandIntro";
+import VisibilityPause from "@/components/VisibilityPause";
+import GrainOverlay from "@/components/ui/GrainOverlay";
 import { getSiteUrl } from "@/lib/site";
 
 export const viewport: Viewport = {
@@ -68,17 +73,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="fr" className={`${sora.variable} ${inter.variable} ${mono.variable}`}>
       <body className="relative min-h-screen overflow-x-hidden">
-        <LanguageProvider>
-          <MotionProvider>
-            {/* Fixed decorative background layers */}
-            <div className="pointer-events-none fixed inset-0 -z-20 bg-base-900" />
-            <div className="pointer-events-none fixed inset-0 -z-10 bg-grid opacity-60" />
-            <div className="pointer-events-none fixed inset-0 -z-10 bg-radial-fade" />
+        <MotionProvider>
+          <LanguageProvider>
+            <SmoothScrollProvider>
+              <BrandIntro>
+                <VisibilityPause />
+                <GridSpotlight />
+                <div className="pointer-events-none fixed inset-0 -z-20 bg-base-900" />
+                <div className="pointer-events-none fixed inset-0 -z-10 bg-grid opacity-25" />
+                <div className="pointer-events-none fixed inset-0 -z-10 bg-grid bg-grid-spotlight opacity-70" />
+                <div className="pointer-events-none fixed inset-0 -z-10 bg-radial-fade" />
 
-            <SmoothCursor />
-            <div className="relative z-0">{children}</div>
-          </MotionProvider>
-        </LanguageProvider>
+                <SmoothCursor />
+                <GrainOverlay />
+                <div className="relative z-0">{children}</div>
+              </BrandIntro>
+            </SmoothScrollProvider>
+          </LanguageProvider>
+        </MotionProvider>
       </body>
     </html>
   );

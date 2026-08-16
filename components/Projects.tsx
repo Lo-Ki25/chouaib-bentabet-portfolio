@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, Sparkles } from "lucide-react";
@@ -11,17 +10,78 @@ import { truncateText } from "@/lib/truncateText";
 import type { Project, ProjectCategory } from "@/types";
 import { CATEGORY_STYLES } from "./categoryStyles";
 import ProjectModal from "./ProjectModal";
+import PillButton from "./ui/PillButton";
 import SectionHeading from "./ui/SectionHeading";
 import { cn } from "@/lib/utils";
 
 const SUMMARY_MAX_LENGTH = 140;
 
-function projectInitials(title: string) {
-  return title
-    .split(" ")
-    .slice(0, 2)
-    .map((w) => w[0])
-    .join("");
+/** Matches PillButton outline, sized for chips (not a button — the card already is). */
+const tagPillClassName =
+  "pointer-events-none rounded-full border border-white/25 bg-transparent px-2.5 py-0.5 text-[11px] font-semibold text-white";
+
+function latestYear(year: string) {
+  const matches = year.match(/\d{4}/g);
+  if (!matches) return 0;
+  return Math.max(...matches.map(Number));
+}
+
+function ProjectCover({
+  title,
+  year,
+  featured,
+  featuredLabel,
+  image,
+  gradient,
+}: {
+  title: string;
+  year: string;
+  featured?: boolean;
+  featuredLabel: string;
+  image?: string;
+  gradient: string;
+}) {
+  const [imageState, setImageState] = useState<"pending" | "loaded" | "error">(
+    image ? "pending" : "error",
+  );
+
+  return (
+    <div className={cn("relative h-40 w-full overflow-hidden bg-gradient-to-br sm:h-36", gradient)}>
+      {image && imageState !== "error" ? (
+        // Native img: next/image optimizer throws on missing files (HTML 404).
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={image}
+          alt={title}
+          className={cn(
+            "absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105",
+            imageState !== "loaded" && "opacity-0",
+          )}
+          onLoad={() => setImageState("loaded")}
+          onError={() => setImageState("error")}
+        />
+      ) : null}
+
+      {imageState !== "loaded" ? (
+        <div className="absolute inset-0 flex items-center justify-center px-6 text-center">
+          <p className="font-display text-base font-semibold leading-snug text-white/90 sm:text-lg">
+            {title}
+          </p>
+        </div>
+      ) : null}
+
+      <div className="absolute inset-0 bg-grid opacity-30 transition-opacity group-hover:opacity-50" />
+      {featured ? (
+        <span className="absolute left-3 top-3 z-10 flex items-center gap-1 rounded-full bg-black/30 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-white backdrop-blur-md">
+          <Sparkles className="h-3 w-3" />
+          {featuredLabel}
+        </span>
+      ) : null}
+      <span className="absolute bottom-3 right-3 z-10 rounded-full bg-black/40 px-2.5 py-1 text-[10px] font-semibold text-white backdrop-blur-md">
+        {year}
+      </span>
+    </div>
+  );
 }
 
 export default function Projects() {
@@ -37,12 +97,18 @@ export default function Projects() {
 
   const canAnimate = mounted && !prefersReducedMotion;
 
-  const categories = useMemo<(ProjectCategory | "All")[]>(() => {
-    const set = new Set<ProjectCategory>(projects.map((p) => p.category));
-    return ["All", ...Array.from(set)];
-  }, []);
+  const sortedProjects = useMemo(
+    () => [...projects].sort((a, b) => latestYear(b.year) - latestYear(a.year)),
+    [],
+  );
 
-  const filtered = active === "All" ? projects : projects.filter((p) => p.category === active);
+  const categories = useMemo<(ProjectCategory | "All")[]>(() => {
+    const set = new Set<ProjectCategory>(sortedProjects.map((p) => p.category));
+    return ["All", ...Array.from(set)];
+  }, [sortedProjects]);
+
+  const filtered =
+    active === "All" ? sortedProjects : sortedProjects.filter((p) => p.category === active);
 
   return (
     <section id="projects" className="relative py-section">
@@ -58,19 +124,14 @@ export default function Projects() {
 
         <div className="-mx-1 mt-8 flex gap-2 overflow-x-auto px-1 pb-1 no-scrollbar sm:mt-10 sm:flex-wrap sm:overflow-visible">
           {categories.map((cat) => (
-            <button
+            <PillButton
               key={cat}
+              variant={active === cat ? "solid" : "outline"}
               onClick={() => setActive(cat)}
-              data-cursor-hover
-              className={cn(
-                "touch-target shrink-0 rounded-full border px-4 py-2.5 text-sm font-medium transition-colors",
-                active === cat
-                  ? "border-accent-500/50 bg-accent-500/15 text-white"
-                  : "border-white/10 bg-white/[0.02] text-muted hover:border-white/20 hover:text-white active:bg-white/5"
-              )}
+              className="shrink-0 px-4 py-2.5"
             >
               {cat === "All" ? dict.projects.all : cat}
-            </button>
+            </PillButton>
           ))}
         </div>
 
@@ -78,6 +139,7 @@ export default function Projects() {
           <AnimatePresence mode="popLayout">
             {filtered.map((project) => {
               const style = CATEGORY_STYLES[project.category];
+              const chips = project.tech.length > 0 ? project.tech : project.tags;
               const cardMotion = canAnimate
                 ? {
                     layout: true as const,
@@ -104,37 +166,20 @@ export default function Projects() {
                   data-cursor-hover
                   className="group flex min-w-0 cursor-pointer flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] text-left transition-colors hover:border-accent-500/30 hover:bg-white/[0.04] active:border-accent-500/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500"
                 >
-                  <div className={`relative h-40 w-full overflow-hidden bg-gradient-to-br sm:h-36 ${style.gradient}`}>
-                    {project.image ? (
-                      <Image
-                        src={project.image}
-                        alt={project.title}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center font-display text-3xl font-bold text-white/25 transition-transform duration-500 group-hover:scale-110">
-                        {projectInitials(project.title)}
-                      </div>
-                    )}
-                    <div className="absolute inset-0 bg-grid opacity-30 transition-opacity group-hover:opacity-50" />
-                    {project.featured ? (
-                      <span className="absolute left-3 top-3 flex items-center gap-1 rounded-full bg-black/30 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-white backdrop-blur-md">
-                        <Sparkles className="h-3 w-3" />
-                        {dict.projects.featured}
-                      </span>
-                    ) : null}
-                    <span className="absolute bottom-3 right-3 rounded-full bg-black/30 px-2.5 py-1 text-[10px] font-semibold text-white backdrop-blur-md">
-                      {project.year}
-                    </span>
-                  </div>
+                  <ProjectCover
+                    title={project.title}
+                    year={project.year}
+                    featured={project.featured}
+                    featuredLabel={dict.projects.featured}
+                    image={project.image}
+                    gradient={style.gradient}
+                  />
 
                   <div className="flex flex-1 flex-col p-4 sm:p-5">
                     <span
                       className={cn(
                         "w-fit rounded-full border px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide",
-                        style.badge
+                        style.badge,
                       )}
                     >
                       {project.category}
@@ -145,15 +190,13 @@ export default function Projects() {
                     </p>
 
                     <div className="mt-4 flex flex-wrap gap-1.5">
-                      {project.tech.slice(0, 3).map((t) => (
-                        <span key={t} className="rounded-md bg-white/5 px-2 py-0.5 text-[11px] text-white/75">
+                      {chips.slice(0, 3).map((t) => (
+                        <span key={t} className={tagPillClassName}>
                           {t}
                         </span>
                       ))}
-                      {project.tech.length > 3 ? (
-                        <span className="rounded-md bg-white/5 px-2 py-0.5 text-[11px] text-white/75">
-                          +{project.tech.length - 3}
-                        </span>
+                      {chips.length > 3 ? (
+                        <span className={tagPillClassName}>+{chips.length - 3}</span>
                       ) : null}
                     </div>
 

@@ -17,6 +17,7 @@ const STORAGE_KEY = "portfolio-lang";
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>("fr");
+  const dict = translations[lang];
 
   useEffect(() => {
     const stored = typeof window !== "undefined" ? window.localStorage.getItem(STORAGE_KEY) : null;
@@ -42,9 +43,9 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       lang,
       toggleLang,
       setLang,
-      dict: translations[lang],
+      dict,
     }),
-    [lang]
+    [dict, lang]
   );
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;

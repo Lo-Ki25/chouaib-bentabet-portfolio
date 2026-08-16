@@ -7,10 +7,17 @@ import { cn } from "@/lib/utils";
 
 export default function ScrollProgress() {
   const { dict } = useLanguage();
+  const [mounted, setMounted] = useState(false);
   const [progress, setProgress] = useState(0);
   const [showBackToTop, setShowBackToTop] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
     const onScroll = () => {
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -21,9 +28,13 @@ export default function ScrollProgress() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [mounted]);
 
   const scrollTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
+  // Client-only chrome: SSR and the first client paint must both be null,
+  // otherwise the progress <div> tree mismatches hydration.
+  if (!mounted) return null;
 
   return (
     <>

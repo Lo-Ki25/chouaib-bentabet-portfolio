@@ -30,6 +30,8 @@ type AnimatedSectionProps = {
   distance?: number;
   once?: boolean;
   as?: "div" | "section";
+  /** Léger effet de bascule 3D (rotateX) en plus du fade/translate, désactivé par défaut. */
+  tilt3d?: boolean;
 };
 
 /**
@@ -46,6 +48,7 @@ export default function AnimatedSection({
   distance = 32,
   once: _once = true,
   as = "div",
+  tilt3d = false,
 }: AnimatedSectionProps) {
   const prefersReducedMotion = useReducedMotion();
   const [mounted, setMounted] = useState(false);
@@ -61,13 +64,21 @@ export default function AnimatedSection({
   }
 
   const Component = as === "section" ? motion.section : motion.div;
+  const variants = getVariants(direction, distance);
+  const tiltVariants = tilt3d
+    ? {
+        hidden: { ...variants.hidden, rotateX: 6 },
+        visible: { ...variants.visible, rotateX: 0 },
+      }
+    : variants;
 
   return (
     <Component
       className={cn(className)}
       initial="hidden"
       animate="visible"
-      variants={getVariants(direction, distance)}
+      variants={tiltVariants}
+      style={tilt3d ? { transformPerspective: 800 } : undefined}
       transition={{ duration, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}

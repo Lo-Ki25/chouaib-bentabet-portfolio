@@ -51,13 +51,9 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
           aria-labelledby="project-modal-title"
         >
           <motion.div
-            initial={
-              prefersReducedMotion
-                ? false
-                : { opacity: 0, y: 32 }
-            }
-            animate={{ opacity: 1, y: 0 }}
-            exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 24 }}
+            initial={prefersReducedMotion ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={panelTransition}
             onClick={(e) => e.stopPropagation()}
             className="glass card-border relative flex h-[100dvh] w-full max-w-3xl flex-col overflow-hidden rounded-none shadow-card safe-x sm:h-auto sm:max-h-[88vh] sm:rounded-3xl"

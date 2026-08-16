@@ -1,7 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import {
   ArrowLeft,
   Building2,
@@ -22,23 +24,23 @@ type ProjectDetailContentProps = {
   variant?: "modal" | "page";
 };
 
-function projectInitials(title: string) {
-  return title
-    .split(" ")
-    .slice(0, 2)
-    .map((w) => w[0])
-    .join("");
-}
-
 export default function ProjectDetailContent({ project, variant = "page" }: ProjectDetailContentProps) {
   const { dict, lang } = useLanguage();
   const style = CATEGORY_STYLES[project.category];
   const headerHeight = variant === "modal" ? "h-32 sm:h-40" : "h-44 sm:h-56";
+  const [imageFailed, setImageFailed] = useState(false);
+
+  useEffect(() => {
+    setImageFailed(false);
+  }, [project.slug, project.image]);
 
   return (
     <article>
-      <div className={`relative w-full overflow-hidden bg-gradient-to-br ${style.gradient} ${headerHeight}`}>
-        {project.image ? (
+      <motion.div
+        layoutId={variant === "modal" ? `project-${project.slug}` : undefined}
+        className={`relative w-full overflow-hidden bg-gradient-to-br ${style.gradient} ${headerHeight}`}
+      >
+        {project.image && !imageFailed ? (
           <Image
             src={project.image}
             alt={project.title}
@@ -46,17 +48,20 @@ export default function ProjectDetailContent({ project, variant = "page" }: Proj
             className="object-cover"
             sizes={variant === "modal" ? "768px" : "1200px"}
             priority={variant === "page"}
+            onError={() => setImageFailed(true)}
           />
         ) : (
-          <div className="absolute inset-0 flex items-center justify-center font-display text-4xl font-bold text-white/30 sm:text-5xl">
-            {projectInitials(project.title)}
+          <div className="absolute inset-0 flex items-center justify-center px-6 text-center">
+            <p className="font-display text-xl font-semibold leading-snug text-white/85 sm:text-2xl">
+              {project.title}
+            </p>
           </div>
         )}
         <div className="absolute inset-0 bg-grid opacity-30" />
         <span className="absolute bottom-3 left-4 rounded-full bg-black/30 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white backdrop-blur-md sm:bottom-4 sm:left-6">
           {project.category}
         </span>
-      </div>
+      </motion.div>
 
       <div className={variant === "modal" ? "p-4 sm:p-8" : "py-6 sm:py-10"}>
         {variant === "page" ? (

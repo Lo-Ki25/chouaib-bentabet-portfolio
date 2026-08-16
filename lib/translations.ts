@@ -9,7 +9,11 @@ export type Dictionary = {
   nav: {
     home: string;
     about: string;
+    services: string;
+    transformation: string;
+    cybersecurity: string;
     skills: string;
+    marketDesign: string;
     experience: string;
     projects: string;
     contact: string;
@@ -26,6 +30,31 @@ export type Dictionary = {
     scroll: string;
     available: string;
   };
+  impact: {
+    eyebrow: string;
+    title: string;
+    body: string;
+  };
+  chapters: {
+    transformation: {
+      eyebrow: string;
+      title: string;
+      body: string;
+      pills: string[];
+    };
+    cybersecurity: {
+      eyebrow: string;
+      title: string;
+      body: string;
+      pills: string[];
+    };
+    marketDesign: {
+      eyebrow: string;
+      title: string;
+      body: string;
+      pills: string[];
+    };
+  };
   about: {
     eyebrow: string;
     title: string;
@@ -34,6 +63,18 @@ export type Dictionary = {
     cta: string;
     valuesTitle: string;
     cvUnavailable: string;
+  };
+  services: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    items: {
+      digitalPresence: { title: string; description: string };
+      brandIdentity: { title: string; description: string };
+      platforms: { title: string; description: string };
+      automation: { title: string; description: string };
+      socialImpact: { title: string; description: string };
+    };
   };
   skills: {
     eyebrow: string;
@@ -47,6 +88,7 @@ export type Dictionary = {
     educationTitle: string;
     languagesTitle: string;
     certificationsTitle: string;
+    associationsTitle: string;
     present: string;
   };
   projects: {
@@ -71,6 +113,10 @@ export type Dictionary = {
     recognitions: string;
     emptyFilter: string;
   };
+  partners: {
+    eyebrow: string;
+    title: string;
+  };
   contact: {
     eyebrow: string;
     title: string;
@@ -92,6 +138,24 @@ export type Dictionary = {
     messagePlaceholder: string;
     privacyNote: string;
     agencyBlurb: string;
+    bookingIntro: string;
+    errorNeedType: string;
+    errorPreferredTime: string;
+    needType: string;
+    selectPlaceholder: string;
+    needTypes: {
+      digitalPresence: string;
+      cybersecurity: string;
+      projectDev: string;
+      marketAnalysis: string;
+      design: string;
+    };
+    preferredTime: string;
+    preferredTimes: {
+      morning: string;
+      afternoon: string;
+      anytime: string;
+    };
   };
   footer: {
     tagline: string;
@@ -105,34 +169,96 @@ export const translations: Record<Lang, Dictionary> = {
     nav: {
       home: "Accueil",
       about: "À propos",
+      services: "Services",
+      transformation: "Transformation",
+      cybersecurity: "Cybersécurité",
       skills: "Compétences",
+      marketDesign: "Marché & design",
       experience: "Parcours",
       projects: "Projets",
       contact: "Contact",
       cta: "Discutons",
     },
     hero: {
-      eyebrow: "Full-Stack Developer · Next.js & TypeScript",
-      title1: "Je conçois des produits web",
-      title2: "rapides, élégants",
-      title3: "et pensés pour durer.",
+      eyebrow: "Chouaib Bentabet · Transformation digitale",
+      title1: "IMPACT",
+      title2: "",
+      title3: "",
       subtitle:
-        "Développeur full-stack basé au Maroc, fondateur de Netnook. Je transforme des idées en plateformes digitales performantes — du prototype à la mise en production.",
+        "Basé au Maroc, j'accompagne PME, associations et institutions dans leur transformation digitale — stratégie, identité de marque, plateformes web et cybersécurité, du premier échange au lancement. Je porte ce travail à travers Netnook, l'agence que j'ai fondée.",
       ctaPrimary: "Voir mes projets",
       ctaSecondary: "Me contacter",
       scroll: "Défiler",
       available: "Disponible pour missions freelance",
     },
+    impact: {
+      eyebrow: "Impact",
+      title: "Quelques chiffres",
+      body: "Des indicateurs issus du travail déjà livré — années d'expérience, projets, personnes concernées et gains d'efficacité observés.",
+    },
+    chapters: {
+      transformation: {
+        eyebrow: "Transformation digitale",
+        title: "Votre activité, une vraie présence digitale",
+        body: "J'accompagne PME, associations et institutions pour structurer leur stratégie, leur identité et leurs plateformes web — du premier échange au lancement.",
+        pills: ["Stratégie digitale", "Plateformes web", "Du premier échange au lancement"],
+      },
+      cybersecurity: {
+        eyebrow: "Cybersécurité",
+        title: "Sécurisé par conception",
+        body: "Audits, protection des données et sécurisation applicative intégrés dès la conception — pas ajoutés à la fin.",
+        pills: ["Protocoles validés", "Audit & conformité", "Sécurisation de bout en bout"],
+      },
+      marketDesign: {
+        eyebrow: "Marché & design",
+        title: "Comprendre le marché, avant de designer",
+        body: "Identité de marque, positionnement et design system : une présence claire, avant même la première ligne de code.",
+        pills: ["Identités de marque", "Positionnement", "Design system"],
+      },
+    },
     about: {
       eyebrow: "À propos",
-      title: "Construire des expériences digitales qui comptent",
+      title: "Simplifier la transformation digitale, pour de vrai",
       body:
-        "Je suis Chouaib Bentabet, développeur full-stack et fondateur de Netnook, une agence digitale basée à Salé, au Maroc. Je conçois des plateformes rapides, sécurisées et magnifiquement animées avec Next.js, TypeScript et un écosystème d'outils modernes — des outils internes qui font gagner 50 % de temps aux équipes, jusqu'aux plateformes EdTech utilisées par plus de 50 000 étudiants à travers l'Afrique.",
+        "Je suis Chouaib Bentabet — j'aide les organisations à exister, se structurer et grandir sur le digital, à travers Netnook, l'agence que j'ai fondée à Salé, au Maroc. J'ai accompagné plus de 10 000 utilisateurs à travers l'Afrique, fait gagner jusqu'à 50 % de temps à des équipes entières, et construit l'identité de marque d'institutions comme UIB Innovation, AFRIC EDUC ou ECOP Morocco — avec, derrière chaque résultat, une exécution technique solide en Next.js, TypeScript et un écosystème moderne.",
       body2:
-        "Chaque projet part d'un vrai problème métier : je conçois l'architecture, je code l'interface et le backend, et je reste impliqué jusqu'au lancement — et après.",
+        "Chaque mission part d'un vrai problème d'activité, jamais d'une simple envie technique : je clarifie l'objectif, je construis la solution — plateforme, identité, automatisation — et je reste impliqué jusqu'au lancement, et après.",
       cta: "Télécharger mon CV",
       valuesTitle: "Ce qui guide mon travail",
       cvUnavailable: "CV bientôt disponible — contactez-moi en attendant.",
+    },
+    services: {
+      eyebrow: "Offre",
+      title: "Cinq leviers, chacun déjà prouvé",
+      subtitle:
+        "Ce que je mets en place pour les organisations — et les missions déjà livrées qui le démontrent.",
+      items: {
+        digitalPresence: {
+          title: "Présence digitale & sites web",
+          description:
+            "Sites et plateformes qui font exister une activité en ligne, de la vitrine à la marketplace.",
+        },
+        brandIdentity: {
+          title: "Identité de marque",
+          description:
+            "Identités visuelles et systèmes de marque pour institutions et organisations, lisibles d'un coup d'œil.",
+        },
+        platforms: {
+          title: "Plateformes & outils métier",
+          description:
+            "Applications internes et plateformes métier pour structurer le quotidien des équipes, pas seulement une vitrine.",
+        },
+        automation: {
+          title: "Automatisation & efficacité",
+          description:
+            "Process digitaux et automatisations qui font gagner du temps aux équipes — 50 % de gain d'efficacité moyen.",
+        },
+        socialImpact: {
+          title: "Impact éducatif & social",
+          description:
+            "Plateformes et sites au service de l'éducation, de la jeunesse et de l'intérêt général.",
+        },
+      },
     },
     skills: {
       eyebrow: "Compétences",
@@ -146,6 +272,7 @@ export const translations: Record<Lang, Dictionary> = {
       educationTitle: "Formation",
       languagesTitle: "Langues",
       certificationsTitle: "Certifications",
+      associationsTitle: "Engagement associatif",
       present: "Présent",
     },
     projects: {
@@ -170,11 +297,15 @@ export const translations: Record<Lang, Dictionary> = {
       recognitions: "Compétitions & reconnaissance",
       emptyFilter: "Aucun projet dans cette catégorie pour le moment.",
     },
+    partners: {
+      eyebrow: "Organisations",
+      title: "Ils m'ont fait confiance",
+    },
     contact: {
       eyebrow: "Contact",
       title: "Discutons de votre prochain projet",
       subtitle:
-        "Une idée, une plateforme à construire, ou simplement envie d'échanger ? Écrivez-moi, je réponds rapidement.",
+        "On vous a peut-être déjà parlé de mon travail. Discutons de ce qui vous amène — votre activité, votre équipe, votre marque.",
       name: "Nom complet",
       email: "Adresse email",
       message: "Votre message",
@@ -194,10 +325,29 @@ export const translations: Record<Lang, Dictionary> = {
       privacyNote:
         "Votre message est envoyé de façon sécurisée via notre formulaire. Vos données ne servent qu'à vous répondre.",
       agencyBlurb:
-        "Également fondateur de Netnook, agence digitale — pour des projets d'entreprise plus larges.",
+        "Ce travail est porté par Netnook, l'agence que j'ai fondée — pour les engagements qui demandent une structure d'entreprise.",
+      bookingIntro: "Décrivez votre besoin : je vous propose un créneau pour en parler.",
+      errorNeedType: "Merci de choisir un type de besoin",
+      errorPreferredTime: "Merci d'indiquer un créneau préféré",
+      needType: "Type de besoin",
+      selectPlaceholder: "Choisir…",
+      needTypes: {
+        digitalPresence: "Présence digitale",
+        cybersecurity: "Cybersécurité",
+        projectDev: "Développement de projet",
+        marketAnalysis: "Analyse de marché",
+        design: "Design",
+      },
+      preferredTime: "Créneau préféré",
+      preferredTimes: {
+        morning: "Matin",
+        afternoon: "Après-midi",
+        anytime: "Peu importe",
+      },
     },
     footer: {
-      tagline: "Développeur full-stack — je construis des produits web rapides, élégants et bien pensés.",
+      tagline:
+        "Chouaib Bentabet — j'aide les organisations à exister, grandir et se simplifier la vie sur le digital.",
       rights: "Tous droits réservés.",
       backToTop: "Retour en haut",
     },
@@ -206,34 +356,95 @@ export const translations: Record<Lang, Dictionary> = {
     nav: {
       home: "Home",
       about: "About",
+      services: "Services",
+      transformation: "Transformation",
+      cybersecurity: "Cybersecurity",
       skills: "Skills",
+      marketDesign: "Market & design",
       experience: "Experience",
       projects: "Projects",
       contact: "Contact",
       cta: "Let's talk",
     },
     hero: {
-      eyebrow: "Full-Stack Developer · Next.js & TypeScript",
-      title1: "I build web products that are",
-      title2: "fast, elegant",
-      title3: "and built to last.",
+      eyebrow: "Chouaib Bentabet · Digital Transformation",
+      title1: "IMPACT",
+      title2: "",
+      title3: "",
       subtitle:
-        "Full-stack developer based in Morocco, founder of Netnook. I turn ideas into high-performing digital platforms — from first prototype to production.",
+        "Based in Morocco, I help SMEs, nonprofits and institutions through digital transformation — strategy, brand identity, web platforms and cybersecurity, from first conversation to launch. I run this work through Netnook, the agency I founded.",
       ctaPrimary: "View my work",
       ctaSecondary: "Get in touch",
       scroll: "Scroll",
       available: "Available for freelance work",
     },
+    impact: {
+      eyebrow: "Impact",
+      title: "Key figures",
+      body: "Indicators from work already delivered — years of practice, projects shipped, people reached, and efficiency gains observed.",
+    },
+    chapters: {
+      transformation: {
+        eyebrow: "Digital transformation",
+        title: "Your activity, a real digital presence",
+        body: "I help SMEs, nonprofits and institutions structure their strategy, brand identity and web platforms — from first conversation to launch.",
+        pills: ["Digital strategy", "Web platforms", "From first talk to launch"],
+      },
+      cybersecurity: {
+        eyebrow: "Cybersecurity",
+        title: "Secure by design",
+        body: "Audits, data protection and application security built in from the start — not bolted on at the end.",
+        pills: ["Validated protocols", "Audit & compliance", "End-to-end security"],
+      },
+      marketDesign: {
+        eyebrow: "Market & design",
+        title: "Understand the market, then design",
+        body: "Brand identity, positioning and design system: a clear presence, before the first line of code.",
+        pills: ["Brand identities", "Positioning", "Design system"],
+      },
+    },
     about: {
       eyebrow: "About",
-      title: "Building digital experiences that matter",
+      title: "Making digital transformation genuinely simple",
       body:
-        "I'm Chouaib Bentabet, a full-stack developer and founder of Netnook, a digital agency based in Salé, Morocco. I design fast, secure and beautifully animated platforms with Next.js, TypeScript and a modern tooling ecosystem — from internal tools that save teams 50% of their time, to EdTech platforms used by 50,000+ students across Africa.",
+        "I'm Chouaib Bentabet — I help organizations exist, structure themselves and grow digitally, through Netnook, the agency I founded in Salé, Morocco. I have supported 10,000+ users across Africa, helped entire teams save up to 50% of their time, and built brand identities for institutions such as UIB Innovation, AFRIC EDUC and ECOP Morocco — with solid technical execution in Next.js, TypeScript and a modern stack behind every result.",
       body2:
-        "Every project starts with a real business problem: I design the architecture, build the interface and backend, and stay involved through launch — and beyond.",
+        "Every engagement starts from a real business problem, never from a technical whim: I clarify the goal, I build the solution — platform, identity, automation — and I stay involved through launch, and after.",
       cta: "Download my CV",
       valuesTitle: "What guides my work",
       cvUnavailable: "CV coming soon — feel free to reach out in the meantime.",
+    },
+    services: {
+      eyebrow: "Services",
+      title: "Five levers, each already proven",
+      subtitle: "What I put in place for organizations — and the engagements already shipped that prove it.",
+      items: {
+        digitalPresence: {
+          title: "Digital presence & websites",
+          description:
+            "Websites and platforms that give an activity a real online presence, from a showcase site to a marketplace.",
+        },
+        brandIdentity: {
+          title: "Brand identity",
+          description:
+            "Visual identities and brand systems for institutions and organizations, readable at a glance.",
+        },
+        platforms: {
+          title: "Platforms & business tools",
+          description:
+            "Internal applications and business platforms that structure teams' day-to-day work, not just a showcase.",
+        },
+        automation: {
+          title: "Automation & efficiency",
+          description:
+            "Digital processes and automations that save teams time — 50% average efficiency gain.",
+        },
+        socialImpact: {
+          title: "Educational & social impact",
+          description:
+            "Platforms and sites in service of education, youth and the public interest.",
+        },
+      },
     },
     skills: {
       eyebrow: "Skills",
@@ -247,6 +458,7 @@ export const translations: Record<Lang, Dictionary> = {
       educationTitle: "Education",
       languagesTitle: "Languages",
       certificationsTitle: "Certifications",
+      associationsTitle: "Community Involvement",
       present: "Present",
     },
     projects: {
@@ -271,10 +483,15 @@ export const translations: Record<Lang, Dictionary> = {
       recognitions: "Competitions & recognition",
       emptyFilter: "No projects in this category yet.",
     },
+    partners: {
+      eyebrow: "Organizations",
+      title: "Organizations I've worked with",
+    },
     contact: {
       eyebrow: "Contact",
       title: "Let's talk about your next project",
-      subtitle: "Got an idea, a platform to build, or just want to say hi? Send me a message, I reply quickly.",
+      subtitle:
+        "You may have already heard about my work from someone. Let's talk about what brings you here — your business, your team, your brand.",
       name: "Full name",
       email: "Email address",
       message: "Your message",
@@ -294,10 +511,29 @@ export const translations: Record<Lang, Dictionary> = {
       privacyNote:
         "Your message will be sent securely through this form. Your details are only used to reply.",
       agencyBlurb:
-        "Also founder of Netnook, a digital agency — for larger business engagements.",
+        "This work runs through Netnook, the agency I founded — for engagements that call for a company structure.",
+      bookingIntro: "Tell me what you need — I will suggest a time to talk it through.",
+      errorNeedType: "Please select a type of need",
+      errorPreferredTime: "Please select a preferred time",
+      needType: "Type of need",
+      selectPlaceholder: "Select…",
+      needTypes: {
+        digitalPresence: "Digital presence",
+        cybersecurity: "Cybersecurity",
+        projectDev: "Project development",
+        marketAnalysis: "Market analysis",
+        design: "Design",
+      },
+      preferredTime: "Preferred time",
+      preferredTimes: {
+        morning: "Morning",
+        afternoon: "Afternoon",
+        anytime: "No preference",
+      },
     },
     footer: {
-      tagline: "Full-stack developer — building fast, elegant, thoughtfully engineered web products.",
+      tagline:
+        "Chouaib Bentabet — helping organizations build a digital presence and simplify how they work.",
       rights: "All rights reserved.",
       backToTop: "Back to top",
     },

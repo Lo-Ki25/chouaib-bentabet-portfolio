@@ -4,6 +4,8 @@
 
 :root {
   color-scheme: dark;
+  --spot-x: 50%;
+  --spot-y: 20%;
 }
 
 * {
@@ -14,7 +16,20 @@ html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+html.lenis {
+  scroll-behavior: auto;
+}
+
+html.has-lenis {
+  scroll-behavior: auto;
 }
 
 body {
@@ -71,6 +86,12 @@ textarea:focus-visible,
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+
+  .will-change-transform,
+  .animate-blob,
+  .animate-marquee {
+    will-change: auto !important;
+  }
 }
 
 /* Utility layer */
@@ -88,6 +109,25 @@ textarea:focus-visible,
       linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
     background-size: 44px 44px;
     mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 40%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 40%, transparent 100%);
+  }
+
+  .bg-grid-spotlight {
+    /* Mask is applied only when html.has-grid-spotlight is set (fine pointer). */
+  }
+
+  .project-spotlight {
+    background: radial-gradient(
+      300px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(59, 107, 255, 0.15),
+      transparent 70%
+    );
+  }
+
+  @media (hover: none) {
+    .project-spotlight {
+      display: none;
+    }
   }
 
   .glass {
@@ -143,6 +183,10 @@ textarea:focus-visible,
     bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px));
     right: calc(1.25rem + env(safe-area-inset-right, 0px));
   }
+
+  .will-change-transform {
+    will-change: transform;
+  }
 }
 
 /* Soften decorative blob motion on small / coarse-pointer screens */
@@ -150,6 +194,46 @@ textarea:focus-visible,
   .animate-blob {
     animation-duration: 22s;
   }
+}
+
+.animate-blob,
+.animate-marquee {
+  will-change: transform;
+}
+
+html.anims-paused .animate-blob,
+html.anims-paused .animate-marquee,
+html.anims-paused .animate-pulse-glow,
+html.tab-hidden .animate-blob,
+html.tab-hidden .animate-marquee,
+html.tab-hidden .animate-pulse-glow {
+  animation-play-state: paused !important;
+  will-change: auto;
+}
+
+html.has-grid-spotlight .bg-grid-spotlight {
+  mask-image: radial-gradient(circle 350px at var(--spot-x) var(--spot-y), black, transparent 70%);
+  -webkit-mask-image: radial-gradient(
+    circle 350px at var(--spot-x) var(--spot-y),
+    black,
+    transparent 70%
+  );
+}
+
+@keyframes brand-intro-fade {
+  0%,
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+.brand-intro {
+  animation: brand-intro-fade 1s ease forwards;
 }
 
 /* Hide native cursor only on fine-pointer desktop devices, handled via JS class on <html> */
