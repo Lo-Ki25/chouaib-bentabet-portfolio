@@ -38,3 +38,5 @@ next-env.d.ts
 # mcp server config (contains API keys - keep local)
 .mcp.json
 .gstack/
+
+/lib/generated/prisma

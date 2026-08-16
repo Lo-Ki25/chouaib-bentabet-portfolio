@@ -10,12 +10,15 @@ type ProjectPageProps = {
   params: { slug: string };
 };
 
-export function generateStaticParams() {
-  return getProjectSlugs().map((slug) => ({ slug }));
+export async function generateStaticParams() {
+  const slugs = await getProjectSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
-export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
-  const project = getProjectBySlug(params.slug);
+export async function generateMetadata({
+  params,
+}: ProjectPageProps): Promise<Metadata> {
+  const project = await getProjectBySlug(params.slug);
   if (!project) {
     return { title: "Projet introuvable" };
   }
@@ -45,8 +48,8 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   };
 }
 
-export default function ProjectPage({ params }: ProjectPageProps) {
-  const project = getProjectBySlug(params.slug);
+export default async function ProjectPage({ params }: ProjectPageProps) {
+  const project = await getProjectBySlug(params.slug);
   if (!project) notFound();
 
   return (

@@ -2,11 +2,12 @@ import type { MetadataRoute } from "next";
 import { getProjectSlugs } from "@/lib/projects";
 import { getSiteUrl } from "@/lib/site";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = getSiteUrl();
   const now = new Date();
+  const slugs = await getProjectSlugs();
 
-  const projectEntries: MetadataRoute.Sitemap = getProjectSlugs().map((slug) => ({
+  const projectEntries: MetadataRoute.Sitemap = slugs.map((slug) => ({
     url: `${base}/projects/${slug}`,
     lastModified: now,
     changeFrequency: "monthly",

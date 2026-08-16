@@ -6,7 +6,6 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, Sparkles } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { useInViewport } from "@/hooks/useInViewport";
-import { projects } from "@/lib/data";
 import { truncateText } from "@/lib/truncateText";
 import type { Project, ProjectCategory } from "@/types";
 import { CATEGORY_STYLES } from "./categoryStyles";
@@ -30,7 +29,11 @@ function latestYear(year: string) {
   return Math.max(...matches.map(Number));
 }
 
-export default function Projects() {
+type ProjectsProps = {
+  projects: Project[];
+};
+
+export default function Projects({ projects }: ProjectsProps) {
   const { dict, lang } = useLanguage();
   const prefersReducedMotion = useReducedMotion();
   const { ref: gridRef, inView } = useInViewport<HTMLDivElement>({
@@ -49,7 +52,7 @@ export default function Projects() {
 
   const sortedProjects = useMemo(
     () => [...projects].sort((a, b) => latestYear(b.year) - latestYear(a.year)),
-    [],
+    [projects],
   );
 
   const categories = useMemo<(ProjectCategory | "All")[]>(() => {
@@ -84,7 +87,7 @@ export default function Projects() {
           />
         </div>
 
-        <FeaturedProjectsCarousel />
+        <FeaturedProjectsCarousel projects={projects} />
 
         <div className="-mx-1 mt-8 flex gap-2 overflow-x-auto px-1 pb-1 no-scrollbar sm:mt-10 sm:flex-wrap sm:overflow-visible">
           {categories.map((cat) => (

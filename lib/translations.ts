@@ -123,8 +123,17 @@ export type Dictionary = {
     email: string;
     message: string;
     send: string;
+    sendRdv: string;
     sending: string;
     success: string;
+    successRdv: string;
+    modeLabel: string;
+    modeMessage: string;
+    modeRdv: string;
+    messageOptional: string;
+    preferredSlot: string;
+    preferredSlotPlaceholder: string;
+    errorPreferredSlot: string;
     direct: string;
     errorName: string;
     errorEmail: string;
@@ -306,8 +315,18 @@ export const translations: Record<Lang, Dictionary> = {
       email: "Adresse email",
       message: "Votre message",
       send: "Envoyer le message",
+      sendRdv: "Demander un rendez-vous",
       sending: "Envoi en cours...",
       success: "Message envoyé ! Je vous répondrai rapidement.",
+      successRdv:
+        "Demande de rendez-vous envoyée ! Je vous proposerai un créneau rapidement.",
+      modeLabel: "Type de demande",
+      modeMessage: "Envoyer un message",
+      modeRdv: "Demander un rendez-vous",
+      messageOptional: "Votre message (optionnel)",
+      preferredSlot: "Créneau souhaité",
+      preferredSlotPlaceholder: "ex. mardi ou mercredi après-midi",
+      errorPreferredSlot: "Merci d'indiquer un créneau souhaité",
       direct: "Ou contactez-moi directement",
       errorName: "Merci d'indiquer votre nom (2 caractères min.)",
       errorEmail: "Adresse email invalide",
@@ -490,8 +509,17 @@ export const translations: Record<Lang, Dictionary> = {
       email: "Email address",
       message: "Your message",
       send: "Send message",
+      sendRdv: "Request an appointment",
       sending: "Sending...",
       success: "Message sent! I'll get back to you soon.",
+      successRdv: "Appointment request sent! I'll suggest a time shortly.",
+      modeLabel: "Request type",
+      modeMessage: "Send a message",
+      modeRdv: "Request an appointment",
+      messageOptional: "Your message (optional)",
+      preferredSlot: "Preferred slot",
+      preferredSlotPlaceholder: "e.g. Tuesday or Wednesday afternoon",
+      errorPreferredSlot: "Please indicate a preferred time slot",
       direct: "Or reach me directly",
       errorName: "Please enter your name (min. 2 characters)",
       errorEmail: "Invalid email address",

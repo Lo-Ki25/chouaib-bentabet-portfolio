@@ -60,9 +60,11 @@ export const values: LocalizedText[] = [
 ];
 
 /**
- * PROJECTS
+ * PROJECTS (seed source only)
  * Les 7 premiers sont des projets clients réels (netnook.solutions/projects).
  * SolarAgroBot est un projet personnel / académique (CV, section "Innovative Projects & Competitions").
+ * Le site public lit les projets via Prisma (`lib/projects.ts`) — ne pas importer
+ * ce tableau dans les composants UI.
  */
 export const projects: Project[] = [
   {

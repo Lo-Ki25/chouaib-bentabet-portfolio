@@ -15,9 +15,9 @@ import {
 } from "framer-motion";
 import { ArrowUpRight, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
-import { projects } from "@/lib/data";
 import { truncateText } from "@/lib/truncateText";
 import { cn } from "@/lib/utils";
+import type { Project } from "@/types";
 import { CATEGORY_STYLES } from "./categoryStyles";
 import ProjectCover from "./ProjectCover";
 
@@ -29,7 +29,13 @@ const VELOCITY_THRESHOLD = 400;
 const tagPillClassName =
   "pointer-events-none rounded-full border border-white/25 bg-transparent px-2.5 py-0.5 text-[11px] font-semibold text-white";
 
-export default function FeaturedProjectsCarousel() {
+type FeaturedProjectsCarouselProps = {
+  projects: Project[];
+};
+
+export default function FeaturedProjectsCarousel({
+  projects,
+}: FeaturedProjectsCarouselProps) {
   const { dict, lang } = useLanguage();
   const prefersReducedMotion = useReducedMotion();
   const [index, setIndex] = useState(0);
@@ -37,7 +43,7 @@ export default function FeaturedProjectsCarousel() {
 
   const featured = useMemo(
     () => projects.filter((p) => p.featured === true),
-    [],
+    [projects],
   );
 
   const count = featured.length;

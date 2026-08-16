@@ -15,8 +15,11 @@ import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import ScrollProgress from "@/components/ScrollProgress";
 import HashScroll from "@/components/HashScroll";
+import { getProjects } from "@/lib/projects";
 
-export default function Home() {
+export default async function Home() {
+  const projects = await getProjects();
+
   return (
     <>
       <HashScroll />
@@ -31,9 +34,9 @@ export default function Home() {
           <Cybersecurity />
           <MarketAndDesign />
         </ChaptersCarousel>
-        <Services />
+        <Services projects={projects} />
         <Skills />
-        <Projects />
+        <Projects projects={projects} />
         <Partners />
         <Experience />
         <Contact />
