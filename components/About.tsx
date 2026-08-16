@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { Download, Quote } from "lucide-react";
+import { Quote } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { profile, missionStatement, values, CAREER_START_YEAR } from "@/lib/data";
 import { useFinePointer } from "@/hooks/useFinePointer";
@@ -35,12 +35,11 @@ export default function About() {
   const canFloat = canAnimate && tabVisible && finePointer;
 
   const showAvatar = Boolean(profile.avatar) && !avatarFailed;
-  const showCv = Boolean(profile.cvUrl);
 
   const quickFacts = [
     { label: lang === "fr" ? "Basé à" : "Based in", value: profile.location },
     { label: lang === "fr" ? "Freelance depuis" : "Freelancing since", value: CAREER_START_YEAR },
-    { label: lang === "fr" ? "Fondateur depuis" : "Founder since", value: "2024" },
+    { label: lang === "fr" ? "Fondateur depuis" : "Founder since", value: "2023" },
     { label: lang === "fr" ? "Langues" : "Languages", value: "AR · FR · EN" },
   ];
 
@@ -49,7 +48,11 @@ export default function About() {
       <div className="mx-auto max-w-6xl px-page">
         <div className="grid gap-10 sm:gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-start lg:gap-16">
           <div className="min-w-0">
-            <SectionHeading eyebrow={dict.about.eyebrow} title={dict.about.title} />
+            <SectionHeading
+              eyebrow={dict.about.eyebrow}
+              title={dict.about.title}
+              emphasize={lang === "fr" ? "pour de vrai" : "genuinely"}
+            />
 
             <AnimatedSection delay={0.1} className="mt-6 space-y-4">
               <p className="text-[15px] leading-relaxed text-muted sm:text-lg">{dict.about.body}</p>
@@ -77,22 +80,6 @@ export default function About() {
                   </span>
                 ))}
               </div>
-            </AnimatedSection>
-
-            <AnimatedSection delay={0.4} className="mt-9">
-              {showCv && profile.cvUrl ? (
-                <a
-                  href={profile.cvUrl}
-                  download="cv-chouaib-bentabet.pdf"
-                  data-cursor-hover
-                  className="touch-target inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/15 px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:border-accent-400/50 hover:bg-white/5 sm:w-auto"
-                >
-                  <Download className="h-4 w-4" />
-                  {dict.about.cta}
-                </a>
-              ) : (
-                <p className="text-sm text-muted">{dict.about.cvUnavailable}</p>
-              )}
             </AnimatedSection>
           </div>
 
@@ -139,8 +126,9 @@ export default function About() {
                   {...(canAnimate
                     ? {
                         initial: { scale: 0.85, opacity: 0 },
-                        animate: { scale: 1, opacity: 1 },
-                        transition: { duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] as const },
+                        whileInView: { scale: 1, opacity: 1 },
+                        viewport: { once: true, amount: 0.4 },
+                        transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
                       }
                     : {})}
                   className="relative h-28 w-28 shrink-0"

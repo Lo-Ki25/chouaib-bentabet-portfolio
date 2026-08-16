@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
@@ -18,6 +16,7 @@ import {
 import { useLanguage } from "@/context/LanguageContext";
 import type { Project } from "@/types";
 import { CATEGORY_STYLES } from "./categoryStyles";
+import ProjectCover from "./ProjectCover";
 
 type ProjectDetailContentProps = {
   project: Project;
@@ -28,39 +27,28 @@ export default function ProjectDetailContent({ project, variant = "page" }: Proj
   const { dict, lang } = useLanguage();
   const style = CATEGORY_STYLES[project.category];
   const headerHeight = variant === "modal" ? "h-32 sm:h-40" : "h-44 sm:h-56";
-  const [imageFailed, setImageFailed] = useState(false);
-
-  useEffect(() => {
-    setImageFailed(false);
-  }, [project.slug, project.image]);
 
   return (
     <article>
       <motion.div
         layoutId={variant === "modal" ? `project-${project.slug}` : undefined}
-        className={`relative w-full overflow-hidden bg-gradient-to-br ${style.gradient} ${headerHeight}`}
+        className="relative w-full overflow-hidden"
       >
-        {project.image && !imageFailed ? (
-          <Image
-            src={project.image}
-            alt={project.title}
-            fill
-            className="object-cover"
-            sizes={variant === "modal" ? "768px" : "1200px"}
-            priority={variant === "page"}
-            onError={() => setImageFailed(true)}
-          />
-        ) : (
-          <div className="absolute inset-0 flex items-center justify-center px-6 text-center">
-            <p className="font-display text-xl font-semibold leading-snug text-white/85 sm:text-2xl">
-              {project.title}
-            </p>
-          </div>
-        )}
-        <div className="absolute inset-0 bg-grid opacity-30" />
-        <span className="absolute bottom-3 left-4 rounded-full bg-black/30 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white backdrop-blur-md sm:bottom-4 sm:left-6">
-          {project.category}
-        </span>
+        <ProjectCover
+          title={project.title}
+          lang={lang}
+          image={project.image}
+          gradient={style.gradient}
+          className={`w-full ${headerHeight}`}
+          initialsClassName={
+            variant === "modal" ? "text-5xl sm:text-6xl" : "text-6xl sm:text-7xl"
+          }
+        >
+          <div className="absolute inset-0 bg-grid opacity-30" />
+          <span className="absolute bottom-3 left-4 z-10 rounded-full bg-black/30 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white backdrop-blur-md sm:bottom-4 sm:left-6">
+            {project.category}
+          </span>
+        </ProjectCover>
       </motion.div>
 
       <div className={variant === "modal" ? "p-4 sm:p-8" : "py-6 sm:py-10"}>

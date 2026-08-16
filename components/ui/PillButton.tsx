@@ -36,9 +36,10 @@ export default function PillButton(props: PillButtonProps) {
   const classes = cn(
     "group relative inline-flex touch-target items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold",
     variant === "solid" &&
-      "overflow-hidden bg-gradient-to-r from-accent-500 to-violet text-white shadow-glow transition-transform hover:scale-105 focus-visible:scale-105",
+      // Dark label on CTA orange: white-on-cta fails WCAG (~2.3–3.5:1); base-900 on cta ≈ 8.6:1
+      "overflow-hidden bg-gradient-to-r from-cta-400 to-cta text-base-900 shadow-[0_0_40px_-10px_rgba(255,138,61,0.55)] transition-transform hover:scale-105 focus-visible:scale-105",
     variant === "outline" &&
-      "border border-white/25 bg-transparent text-white transition-colors hover:border-white/60 hover:bg-white/5",
+      "border border-cta/50 bg-transparent text-cta-100 transition-colors hover:border-cta hover:bg-cta/10 hover:text-white",
     className,
   );
 

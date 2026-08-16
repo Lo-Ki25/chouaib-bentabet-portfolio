@@ -1,6 +1,8 @@
 "use client";
 
+import { useReducedMotion } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
+import { useInViewport } from "@/hooks/useInViewport";
 import AnimatedSection from "./ui/AnimatedSection";
 import SectionHeading from "./ui/SectionHeading";
 import TiltCard from "./ui/TiltCard";
@@ -18,7 +20,9 @@ const PARTNERS = [
 
 export default function Partners() {
   const { dict } = useLanguage();
+  const prefersReducedMotion = useReducedMotion();
   const loopedPartners = [...PARTNERS, ...PARTNERS];
+  const marquee = useInViewport<HTMLDivElement>({ once: false, threshold: 0.15 });
 
   return (
     <section id="partners" className="relative overflow-x-clip py-section">
@@ -26,10 +30,12 @@ export default function Partners() {
         <SectionHeading eyebrow={dict.partners.eyebrow} title={dict.partners.title} />
       </div>
 
-      <AnimatedSection delay={0.15} className="relative mt-10 overflow-hidden sm:mt-14">
+      <AnimatedSection delay={0.08} className="relative mt-10 overflow-hidden sm:mt-14">
         <div
+          ref={marquee.ref}
           className="flex w-max gap-3 animate-marquee will-change-transform motion-reduce:animate-none sm:gap-4"
           style={{
+            animationPlayState: marquee.inView && !prefersReducedMotion ? "running" : "paused",
             maskImage: "linear-gradient(90deg, transparent, black 8%, black 92%, transparent)",
             WebkitMaskImage:
               "linear-gradient(90deg, transparent, black 8%, black 92%, transparent)",

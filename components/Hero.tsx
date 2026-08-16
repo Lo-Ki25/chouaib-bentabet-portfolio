@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
-import { ArrowDown, Download, Mail } from "lucide-react";
+import { ArrowDown, Mail } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { profile } from "@/lib/data";
 import { useFinePointer } from "@/hooks/useFinePointer";
@@ -16,8 +16,6 @@ import KineticHeadline from "./ui/KineticHeadline";
 import PillButton from "./ui/PillButton";
 
 const HeroScene = dynamic(() => import("./three/HeroScene"), { ssr: false });
-
-const CV_HREF = "/cv-chouaib-bentabet.pdf";
 
 export default function Hero() {
   const { dict } = useLanguage();
@@ -39,7 +37,6 @@ export default function Hero() {
   const canAnimate = mounted && !prefersReducedMotion;
   const canLoop = canAnimate && tabVisible;
   const show3D = canAnimate && finePointer;
-  const cvHref = profile.cvUrl ?? CV_HREF;
 
   const fadeUp = (delay = 0) =>
     canAnimate
@@ -117,8 +114,8 @@ export default function Hero() {
         <div>
           <motion.div {...fadeUp(0)} className="flex flex-wrap items-center gap-x-4 gap-y-3">
             <Eyebrow>{dict.hero.eyebrow}</Eyebrow>
-            <span className="inline-flex items-center gap-2 text-[11px] font-medium text-cyan sm:text-xs">
-              <span className="h-2 w-2 shrink-0 rounded-full bg-cyan animate-pulse-glow motion-reduce:animate-none" />
+            <span className="inline-flex items-center gap-2 text-[11px] font-medium text-cta sm:text-xs">
+              <span className="h-2 w-2 shrink-0 rounded-full bg-cta animate-pulse-glow motion-reduce:animate-none" />
               <span className="truncate">{dict.hero.available}</span>
             </span>
           </motion.div>
@@ -148,9 +145,6 @@ export default function Hero() {
             </PillButton>
             <PillButton href="#contact" variant="outline" icon={Mail} className="w-full sm:w-auto">
               {dict.hero.ctaSecondary}
-            </PillButton>
-            <PillButton href={cvHref} variant="outline" icon={Download} className="w-full sm:w-auto">
-              {dict.about.cta}
             </PillButton>
           </motion.div>
         </div>

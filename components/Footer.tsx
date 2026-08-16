@@ -4,6 +4,7 @@ import { ArrowUp, Github, Linkedin, Twitter, Facebook } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { profile } from "@/lib/data";
 import { getActiveSocials } from "@/lib/socials";
+import AnimatedSection from "./ui/AnimatedSection";
 
 const socialIcons = {
   github: Github,
@@ -24,7 +25,11 @@ export default function Footer() {
 
   return (
     <footer className="relative border-t border-white/10 py-8 safe-bottom sm:py-10">
-      <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-page text-center sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:text-left">
+      <AnimatedSection
+        delay={0.05}
+        distance={16}
+        className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-page text-center sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:text-left"
+      >
         <div className="min-w-0">
           <p className="font-display text-base font-bold text-white">
             {profile.name}
@@ -66,7 +71,7 @@ export default function Footer() {
             <ArrowUp className="h-4 w-4" />
           </button>
         </div>
-      </div>
+      </AnimatedSection>
     </footer>
   );
 }

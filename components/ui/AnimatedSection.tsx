@@ -2,9 +2,12 @@
 
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { useEffect, useState, type ReactNode } from "react";
+import { useInViewport } from "@/hooks/useInViewport";
 import { cn } from "@/lib/utils";
 
 type Direction = "up" | "down" | "left" | "right" | "none";
+
+const EASE = [0.22, 1, 0.36, 1] as const;
 
 const getVariants = (direction: Direction, distance: number): Variants => {
   const offset: Record<Direction, { x: number; y: number }> = {
@@ -35,9 +38,9 @@ type AnimatedSectionProps = {
 };
 
 /**
- * Entrance wrapper that is always visible on SSR / first paint.
- * Animations only attach after client mount when motion is allowed —
- * never leave content stuck at opacity: 0 (no whileInView dependency).
+ * Entrance wrapper that stays visible on SSR / first paint and when reduced
+ * motion is on. After hydration, fades/slides in on viewport entry
+ * (IntersectionObserver) — never on mount for below-the-fold content.
  */
 export default function AnimatedSection({
   children,
@@ -46,24 +49,24 @@ export default function AnimatedSection({
   duration = 0.7,
   direction = "up",
   distance = 32,
-  once: _once = true,
+  once = true,
   as = "div",
   tilt3d = false,
 }: AnimatedSectionProps) {
   const prefersReducedMotion = useReducedMotion();
   const [mounted, setMounted] = useState(false);
-  const Tag = as === "section" ? "section" : "div";
+  const { ref, inView } = useInViewport<HTMLDivElement>({
+    once,
+    threshold: 0.1,
+    rootMargin: "80px 0px -40px 0px",
+  });
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Fail-safe: visible until hydrated, and always when reduced motion is on
-  if (!mounted || prefersReducedMotion) {
-    return <Tag className={cn(className)}>{children}</Tag>;
-  }
-
   const Component = as === "section" ? motion.section : motion.div;
+  const reduceMotion = !mounted || prefersReducedMotion;
   const variants = getVariants(direction, distance);
   const tiltVariants = tilt3d
     ? {
@@ -74,12 +77,17 @@ export default function AnimatedSection({
 
   return (
     <Component
+      ref={ref}
       className={cn(className)}
-      initial="hidden"
-      animate="visible"
-      variants={tiltVariants}
-      style={tilt3d ? { transformPerspective: 800 } : undefined}
-      transition={{ duration, delay, ease: [0.22, 1, 0.36, 1] }}
+      {...(reduceMotion
+        ? {}
+        : {
+            initial: "hidden" as const,
+            animate: (inView ? "visible" : "hidden") as "hidden" | "visible",
+            variants: tiltVariants,
+            transition: { duration, delay, ease: EASE },
+          })}
+      style={tilt3d && !reduceMotion ? { transformPerspective: 800 } : undefined}
     >
       {children}
     </Component>

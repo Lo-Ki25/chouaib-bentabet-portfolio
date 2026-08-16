@@ -24,18 +24,14 @@ const navLinks: { id: string; key: NavKey }[] = [
 
 const scrollSections = [
   ...navLinks.map((l) => l.id),
-  "transformation",
   "cybersecurity",
   "skills",
-  "marketDesign",
   "experience",
 ];
 
 const hiddenSectionNavMap: Record<string, NavKey> = {
-  transformation: "services",
   cybersecurity: "services",
   skills: "about",
-  marketDesign: "projects",
   experience: "about",
 };
 

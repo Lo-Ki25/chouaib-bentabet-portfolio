@@ -11,9 +11,10 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
-import { projects, stats } from "@/lib/data";
+import { stats } from "@/lib/data";
 import type { Dictionary } from "@/lib/translations";
 import { cn } from "@/lib/utils";
+import type { Project } from "@/types";
 import AnimatedSection from "./ui/AnimatedSection";
 import SectionHeading from "./ui/SectionHeading";
 import TiltCard from "./ui/TiltCard";
@@ -57,11 +58,17 @@ const SERVICE_DEFS: {
   },
 ];
 
-const projectTitleBySlug = new Map(projects.map((project) => [project.slug, project.title]));
 const efficiencyStat = stats.find((item) => item.value === 50 && item.suffix === "%");
 
-export default function Services() {
+type ServicesProps = {
+  projects: Project[];
+};
+
+export default function Services({ projects }: ServicesProps) {
   const { dict, lang } = useLanguage();
+  const projectTitleBySlug = new Map(
+    projects.map((project) => [project.slug, project.title]),
+  );
 
   return (
     <section id="services" className="relative py-section">
@@ -70,6 +77,7 @@ export default function Services() {
           eyebrow={dict.services.eyebrow}
           title={dict.services.title}
           subtitle={dict.services.subtitle}
+          emphasize={lang === "fr" ? "déjà prouvé" : "already proven"}
         />
 
         <div className="mt-12 grid gap-4 sm:mt-16 sm:grid-cols-2 sm:gap-5 lg:grid-cols-6">

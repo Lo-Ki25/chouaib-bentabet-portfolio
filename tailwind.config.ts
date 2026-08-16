@@ -42,11 +42,20 @@ const config: Config = {
         cyan: {
           DEFAULT: "#22D3EE",
         },
+        cta: {
+          DEFAULT: "#FF8A3D",
+          50: "#FFF3EA",
+          100: "#FFE4CC",
+          400: "#FFA05C",
+          500: "#FF8A3D",
+          600: "#FF6B1A",
+          700: "#E85A0C",
+        },
         muted: "#A8B8CC",
       },
       fontFamily: {
-        display: ["var(--font-sora)", "sans-serif"],
-        body: ["var(--font-inter)", "sans-serif"],
+        display: ["var(--font-display)", "serif"],
+        body: ["var(--font-body)", "sans-serif"],
         mono: ["var(--font-mono)", "monospace"],
       },
       backgroundImage: {

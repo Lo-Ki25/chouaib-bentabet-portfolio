@@ -8,12 +8,14 @@ import {
   NEED_TYPES,
   PREFERRED_TIMES,
   type ContactFormData,
+  type ContactType,
 } from "@/lib/contactSchema";
 import {
   Mail,
   Phone,
   MapPin,
   Send,
+  CalendarDays,
   Github,
   Linkedin,
   Twitter,
@@ -23,6 +25,7 @@ import {
 import { useLanguage } from "@/context/LanguageContext";
 import { profile } from "@/lib/data";
 import { getActiveSocials } from "@/lib/socials";
+import { cn } from "@/lib/utils";
 import AnimatedSection from "./ui/AnimatedSection";
 import PillButton from "./ui/PillButton";
 import Chapter from "./ui/Chapter";
@@ -40,6 +43,7 @@ const fieldClassName =
 export default function Contact() {
   const { dict } = useLanguage();
   const [submitted, setSubmitted] = useState(false);
+  const [submittedMode, setSubmittedMode] = useState<ContactType>("message");
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const schema = useMemo(
@@ -50,6 +54,7 @@ export default function Contact() {
         errorMessage: dict.contact.errorMessage,
         errorNeedType: dict.contact.errorNeedType,
         errorPreferredTime: dict.contact.errorPreferredTime,
+        errorPreferredSlot: dict.contact.errorPreferredSlot,
       }),
     [dict]
   );
@@ -58,27 +63,47 @@ export default function Contact() {
     register,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<ContactFormData>({
     resolver: zodResolver(schema),
     defaultValues: {
+      type: "message",
       name: "",
       email: "",
       message: "",
+      preferredSlot: "",
+      website: "",
       needType: undefined,
       preferredTime: undefined,
     },
   });
+
+  const contactType = watch("type") ?? "message";
+  const isRdv = contactType === "rdv";
+
+  const setContactType = (next: ContactType) => {
+    setValue("type", next, { shouldValidate: true, shouldDirty: true });
+    if (next === "message") {
+      setValue("preferredSlot", "", { shouldValidate: true });
+    }
+  };
 
   const onSubmit = async (data: ContactFormData) => {
     setSubmitError(null);
     setSubmitted(false);
 
     try {
+      const payloadBody = {
+        ...data,
+        preferredSlot: data.type === "rdv" ? data.preferredSlot : "",
+      };
+
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payloadBody),
       });
 
       const payload = (await response.json().catch(() => null)) as
@@ -86,6 +111,10 @@ export default function Contact() {
         | null;
 
       if (!response.ok) {
+        if (response.status === 429) {
+          setSubmitError(payload?.error ?? dict.contact.errorSend);
+          return;
+        }
         if (payload?.code === "EMAIL_NOT_CONFIGURED" || response.status === 503) {
           setSubmitError(dict.contact.serviceUnavailable);
           return;
@@ -94,6 +123,7 @@ export default function Contact() {
         return;
       }
 
+      setSubmittedMode(data.type);
       setSubmitted(true);
       reset();
       setTimeout(() => setSubmitted(false), 5000);
@@ -191,7 +221,69 @@ export default function Contact() {
           delay={0.1}
           className="min-w-0 rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:p-8"
         >
-          <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            noValidate
+            className="relative space-y-5"
+          >
+            {/* Honeypot — hidden from users; leave empty */}
+            <div
+              className="absolute -left-[9999px] h-0 w-0 overflow-hidden"
+              aria-hidden="true"
+            >
+              <label htmlFor="website">Website</label>
+              <input
+                id="website"
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                {...register("website")}
+              />
+            </div>
+
+            <fieldset>
+              <legend className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-muted">
+                {dict.contact.modeLabel}
+              </legend>
+              <div
+                role="radiogroup"
+                aria-label={dict.contact.modeLabel}
+                className="grid grid-cols-1 gap-2 sm:grid-cols-2"
+              >
+                <button
+                  type="button"
+                  role="radio"
+                  aria-checked={!isRdv}
+                  data-cursor-hover
+                  onClick={() => setContactType("message")}
+                  className={cn(
+                    "touch-target rounded-xl border px-4 py-3 text-sm font-medium transition-colors",
+                    !isRdv
+                      ? "border-accent-500/50 bg-accent-500/15 text-white"
+                      : "border-white/10 bg-white/[0.03] text-white/70 hover:border-white/20 hover:text-white"
+                  )}
+                >
+                  {dict.contact.modeMessage}
+                </button>
+                <button
+                  type="button"
+                  role="radio"
+                  aria-checked={isRdv}
+                  data-cursor-hover
+                  onClick={() => setContactType("rdv")}
+                  className={cn(
+                    "touch-target rounded-xl border px-4 py-3 text-sm font-medium transition-colors",
+                    isRdv
+                      ? "border-accent-500/50 bg-accent-500/15 text-white"
+                      : "border-white/10 bg-white/[0.03] text-white/70 hover:border-white/20 hover:text-white"
+                  )}
+                >
+                  {dict.contact.modeRdv}
+                </button>
+              </div>
+              <input type="hidden" {...register("type")} />
+            </fieldset>
+
             <div>
               <label
                 htmlFor="name"
@@ -286,12 +378,35 @@ export default function Contact() {
               ) : null}
             </div>
 
+            {isRdv ? (
+              <div>
+                <label
+                  htmlFor="preferredSlot"
+                  className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-muted"
+                >
+                  {dict.contact.preferredSlot}
+                </label>
+                <input
+                  id="preferredSlot"
+                  type="text"
+                  placeholder={dict.contact.preferredSlotPlaceholder}
+                  {...register("preferredSlot")}
+                  className={fieldClassName}
+                />
+                {errors.preferredSlot ? (
+                  <p className="mt-1.5 text-xs text-red-400">
+                    {errors.preferredSlot.message}
+                  </p>
+                ) : null}
+              </div>
+            ) : null}
+
             <div>
               <label
                 htmlFor="message"
                 className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-muted"
               >
-                {dict.contact.message}
+                {isRdv ? dict.contact.messageOptional : dict.contact.message}
               </label>
               <textarea
                 id="message"
@@ -308,17 +423,23 @@ export default function Contact() {
             <PillButton
               type="submit"
               variant="solid"
-              icon={Send}
+              icon={isRdv ? CalendarDays : Send}
               disabled={isSubmitting}
               className="w-full disabled:opacity-60 sm:w-auto"
             >
-              {isSubmitting ? dict.contact.sending : dict.contact.send}
+              {isSubmitting
+                ? dict.contact.sending
+                : isRdv
+                  ? dict.contact.sendRdv
+                  : dict.contact.send}
             </PillButton>
 
             {submitted ? (
               <p className="flex items-center gap-2 text-sm text-emerald-400">
                 <CheckCircle2 className="h-4 w-4" />
-                {dict.contact.success}
+                {submittedMode === "rdv"
+                  ? dict.contact.successRdv
+                  : dict.contact.success}
               </p>
             ) : null}
 

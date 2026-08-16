@@ -1,0 +1,72 @@
+// Prisma + MongoDB (v6.x — Prisma 7 n'a pas encore le support MongoDB).
+// Pas de modèle User : un seul admin via ADMIN_EMAIL / ADMIN_PASSWORD_HASH.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+/// Texte bilingue — miroir de LocalizedText ({ fr, en }) dans types/index.ts.
+type LocalizedText {
+  fr String
+  en String
+}
+
+/// Métrique projet — miroir de ProjectMetric.
+type ProjectMetric {
+  value String
+  label LocalizedText
+}
+
+/// Placeholder historique (Prisma/Mongo exigeait un modèle). Conservé pour cohérence.
+model HealthCheck {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  note      String?
+}
+
+/// Projet portfolio — miroir du type Project (types/index.ts).
+model Project {
+  id           String          @id @default(auto()) @map("_id") @db.ObjectId
+  slug         String          @unique
+  title        String
+  category     String
+  year         String
+  client       String?
+  personal     Boolean?
+  summary      LocalizedText
+  challenge    LocalizedText?
+  solution     LocalizedText?
+  impact       LocalizedText?
+  metrics      ProjectMetric[]
+  recognitions String[]
+  tech         String[]
+  tags         String[]
+  featured     Boolean?
+  /// Chemin local (/images/...) ou URL Vercel Blob.
+  image        String?
+  demoUrl      String?
+  repoUrl      String?
+}
+
+enum LeadType {
+  message
+  rdv
+}
+
+/// Lead unifié : messages contact + demandes RDV.
+model Lead {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  email         String
+  phone         String?
+  message       String
+  type          LeadType
+  preferredSlot String?
+  read          Boolean  @default(false)
+  createdAt     DateTime @default(now())
+}
