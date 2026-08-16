@@ -34,3 +34,7 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+
+# mcp server config (contains API keys - keep local)
+.mcp.json
+.gstack/

@@ -8,7 +8,7 @@ type CategoryStyle = {
 export const CATEGORY_STYLES: Record<ProjectCategory, CategoryStyle> = {
   EdTech: {
     gradient: "from-teal-400 via-cyan to-teal-600",
-    badge: "bg-cyan/15 text-cyan border-cyan/40",
+    badge: "bg-cta/15 text-cta border-cta/40",
   },
   Platforms: {
     gradient: "from-indigo-700 via-accent-700 to-indigo-950",

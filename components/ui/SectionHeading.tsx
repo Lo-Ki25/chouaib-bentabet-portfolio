@@ -1,5 +1,7 @@
 "use client";
 
+import { motion, useReducedMotion } from "framer-motion";
+import { useInViewport } from "@/hooks/useInViewport";
 import AnimatedSection from "./AnimatedSection";
 import { cn } from "@/lib/utils";
 
@@ -9,6 +11,8 @@ type SectionHeadingProps = {
   subtitle?: string;
   align?: "left" | "center";
   className?: string;
+  /** Case-sensitive substring of `title` to highlight when the heading enters view. */
+  emphasize?: string;
 };
 
 export default function SectionHeading({
@@ -17,7 +21,18 @@ export default function SectionHeading({
   subtitle,
   align = "left",
   className,
+  emphasize,
 }: SectionHeadingProps) {
+  const prefersReducedMotion = useReducedMotion();
+  const { ref, inView } = useInViewport<HTMLHeadingElement>();
+
+  const matchIndex = emphasize ? title.indexOf(emphasize) : -1;
+  const hasEmphasis = Boolean(emphasize) && matchIndex !== -1;
+  const canAnimateEmphasis = hasEmphasis && !prefersReducedMotion;
+
+  const before = hasEmphasis ? title.slice(0, matchIndex) : "";
+  const after = hasEmphasis && emphasize ? title.slice(matchIndex + emphasize.length) : "";
+
   return (
     <AnimatedSection
       tilt3d
@@ -27,8 +42,33 @@ export default function SectionHeading({
         <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent-400 animate-pulse-glow motion-reduce:animate-none" />
         <span className="truncate">{eyebrow}</span>
       </span>
-      <h2 className="mt-4 font-display text-[1.75rem] font-bold leading-[1.15] text-white sm:mt-5 sm:text-4xl md:text-5xl balance">
-        {title}
+      <h2
+        ref={ref}
+        className={cn(
+          "mt-4 font-display text-[1.75rem] font-bold leading-[1.15] sm:mt-5 sm:text-4xl md:text-5xl balance",
+          hasEmphasis ? "text-white/60" : "text-white",
+        )}
+      >
+        {hasEmphasis && emphasize ? (
+          <>
+            {before}
+            <motion.span
+              className="inline-block text-white"
+              {...(canAnimateEmphasis
+                ? {
+                    initial: { opacity: 0.4, y: 8 },
+                    animate: inView ? { opacity: 1, y: 0 } : { opacity: 0.4, y: 8 },
+                    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
+                  }
+                : {})}
+            >
+              {emphasize}
+            </motion.span>
+            {after}
+          </>
+        ) : (
+          title
+        )}
       </h2>
       {subtitle ? (
         <p className="mt-3 text-[15px] leading-relaxed text-muted sm:mt-4 sm:text-lg">{subtitle}</p>

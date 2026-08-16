@@ -16,8 +16,8 @@ export const profile = {
   name: "Chouaib Bentabet",
   initials: "CB",
   title: {
-    en: "Entrepreneur, Full-Stack Developer & Founder of Netnook",
-    fr: "Entrepreneur, Développeur Full-Stack & Fondateur de Netnook",
+    en: "Freelance digital transformation consultant — founder of Netnook",
+    fr: "Consultant freelance en transformation digitale — fondateur de Netnook",
   } satisfies LocalizedText,
   email: "bentabet.chouaib25@gmail.com",
   phone: "+212 601 381 005",

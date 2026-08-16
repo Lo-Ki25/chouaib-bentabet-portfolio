@@ -60,9 +60,7 @@ export type Dictionary = {
     title: string;
     body: string;
     body2: string;
-    cta: string;
     valuesTitle: string;
-    cvUnavailable: string;
   };
   services: {
     eyebrow: string;
@@ -185,7 +183,7 @@ export const translations: Record<Lang, Dictionary> = {
       title2: "",
       title3: "",
       subtitle:
-        "Basé au Maroc, j'accompagne PME, associations et institutions dans leur transformation digitale — stratégie, identité de marque, plateformes web et cybersécurité, du premier échange au lancement. Je porte ce travail à travers Netnook, l'agence que j'ai fondée.",
+        "Basé au Maroc, j'accompagne PME, associations et institutions dans leur transformation digitale — stratégie, identité de marque, plateformes web et cybersécurité, du premier échange au lancement.",
       ctaPrimary: "Voir mes projets",
       ctaSecondary: "Me contacter",
       scroll: "Défiler",
@@ -220,12 +218,10 @@ export const translations: Record<Lang, Dictionary> = {
       eyebrow: "À propos",
       title: "Simplifier la transformation digitale, pour de vrai",
       body:
-        "Je suis Chouaib Bentabet — j'aide les organisations à exister, se structurer et grandir sur le digital, à travers Netnook, l'agence que j'ai fondée à Salé, au Maroc. J'ai accompagné plus de 10 000 utilisateurs à travers l'Afrique, fait gagner jusqu'à 50 % de temps à des équipes entières, et construit l'identité de marque d'institutions comme UIB Innovation, AFRIC EDUC ou ECOP Morocco — avec, derrière chaque résultat, une exécution technique solide en Next.js, TypeScript et un écosystème moderne.",
+        "Je suis Chouaib Bentabet — j'aide les organisations à exister, se structurer et grandir sur le digital, basé à Salé, au Maroc. J'ai accompagné plus de 10 000 utilisateurs à travers l'Afrique, fait gagner jusqu'à 50 % de temps à des équipes entières, et construit l'identité de marque d'institutions comme UIB Innovation, AFRIC EDUC ou ECOP Morocco — avec, derrière chaque résultat, une exécution technique solide en Next.js, TypeScript et un écosystème moderne. Je porte une partie de ce travail à travers Netnook, l'agence que j'ai fondée.",
       body2:
         "Chaque mission part d'un vrai problème d'activité, jamais d'une simple envie technique : je clarifie l'objectif, je construis la solution — plateforme, identité, automatisation — et je reste impliqué jusqu'au lancement, et après.",
-      cta: "Télécharger mon CV",
       valuesTitle: "Ce qui guide mon travail",
-      cvUnavailable: "CV bientôt disponible — contactez-moi en attendant.",
     },
     services: {
       eyebrow: "Offre",
@@ -347,7 +343,7 @@ export const translations: Record<Lang, Dictionary> = {
     },
     footer: {
       tagline:
-        "Chouaib Bentabet — j'aide les organisations à exister, grandir et se simplifier la vie sur le digital.",
+        "Transformation digitale, cybersécurité, marque — un partenaire, pas un prestataire de plus.",
       rights: "Tous droits réservés.",
       backToTop: "Retour en haut",
     },
@@ -372,7 +368,7 @@ export const translations: Record<Lang, Dictionary> = {
       title2: "",
       title3: "",
       subtitle:
-        "Based in Morocco, I help SMEs, nonprofits and institutions through digital transformation — strategy, brand identity, web platforms and cybersecurity, from first conversation to launch. I run this work through Netnook, the agency I founded.",
+        "Based in Morocco, I help SMEs, nonprofits and institutions through digital transformation — strategy, brand identity, web platforms and cybersecurity, from first conversation to launch.",
       ctaPrimary: "View my work",
       ctaSecondary: "Get in touch",
       scroll: "Scroll",
@@ -407,12 +403,10 @@ export const translations: Record<Lang, Dictionary> = {
       eyebrow: "About",
       title: "Making digital transformation genuinely simple",
       body:
-        "I'm Chouaib Bentabet — I help organizations exist, structure themselves and grow digitally, through Netnook, the agency I founded in Salé, Morocco. I have supported 10,000+ users across Africa, helped entire teams save up to 50% of their time, and built brand identities for institutions such as UIB Innovation, AFRIC EDUC and ECOP Morocco — with solid technical execution in Next.js, TypeScript and a modern stack behind every result.",
+        "I'm Chouaib Bentabet — I help organizations exist, structure themselves and grow digitally, based in Salé, Morocco. I have supported 10,000+ users across Africa, helped entire teams save up to 50% of their time, and built brand identities for institutions such as UIB Innovation, AFRIC EDUC and ECOP Morocco — with solid technical execution in Next.js, TypeScript and a modern stack behind every result. I run part of this work through Netnook, the agency I founded.",
       body2:
         "Every engagement starts from a real business problem, never from a technical whim: I clarify the goal, I build the solution — platform, identity, automation — and I stay involved through launch, and after.",
-      cta: "Download my CV",
       valuesTitle: "What guides my work",
-      cvUnavailable: "CV coming soon — feel free to reach out in the meantime.",
     },
     services: {
       eyebrow: "Services",
@@ -533,7 +527,7 @@ export const translations: Record<Lang, Dictionary> = {
     },
     footer: {
       tagline:
-        "Chouaib Bentabet — helping organizations build a digital presence and simplify how they work.",
+        "Digital transformation, cybersecurity, brand — a partner, not just another vendor.",
       rights: "All rights reserved.",
       backToTop: "Back to top",
     },

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Sora, Inter, JetBrains_Mono } from "next/font/google";
+import { Calistoga, Work_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/context/LanguageContext";
 import MotionProvider from "@/components/MotionProvider";
@@ -9,6 +9,7 @@ import GridSpotlight from "@/components/GridSpotlight";
 import BrandIntro from "@/components/BrandIntro";
 import VisibilityPause from "@/components/VisibilityPause";
 import GrainOverlay from "@/components/ui/GrainOverlay";
+import AmbientHalo from "@/components/ui/AmbientHalo";
 import { getSiteUrl } from "@/lib/site";
 
 export const viewport: Viewport = {
@@ -18,16 +19,17 @@ export const viewport: Viewport = {
   themeColor: "#05070d",
 };
 
-const sora = Sora({
+const calistoga = Calistoga({
   subsets: ["latin"],
-  variable: "--font-sora",
-  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-display",
+  weight: "400",
   display: "swap",
 });
 
-const inter = Inter({
+const workSans = Work_Sans({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-body",
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -71,7 +73,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={`${sora.variable} ${inter.variable} ${mono.variable}`}>
+    <html lang="fr" className={`${calistoga.variable} ${workSans.variable} ${mono.variable}`}>
       <body className="relative min-h-screen overflow-x-hidden">
         <MotionProvider>
           <LanguageProvider>
@@ -82,7 +84,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <div className="pointer-events-none fixed inset-0 -z-20 bg-base-900" />
                 <div className="pointer-events-none fixed inset-0 -z-10 bg-grid opacity-25" />
                 <div className="pointer-events-none fixed inset-0 -z-10 bg-grid bg-grid-spotlight opacity-70" />
-                <div className="pointer-events-none fixed inset-0 -z-10 bg-radial-fade" />
+                <AmbientHalo />
 
                 <SmoothCursor />
                 <GrainOverlay />

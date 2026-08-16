@@ -2,11 +2,12 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import ImpactBand from "@/components/ImpactBand";
 import About from "@/components/About";
-import Services from "@/components/Services";
+import ChaptersCarousel from "@/components/ChaptersCarousel";
 import DigitalTransformation from "@/components/DigitalTransformation";
 import Cybersecurity from "@/components/Cybersecurity";
-import Skills from "@/components/Skills";
 import MarketAndDesign from "@/components/MarketAndDesign";
+import Services from "@/components/Services";
+import Skills from "@/components/Skills";
 import Experience from "@/components/Experience";
 import Projects from "@/components/Projects";
 import Partners from "@/components/Partners";
@@ -25,11 +26,13 @@ export default function Home() {
         <Hero />
         <ImpactBand />
         <About />
+        <ChaptersCarousel>
+          <DigitalTransformation />
+          <Cybersecurity />
+          <MarketAndDesign />
+        </ChaptersCarousel>
         <Services />
-        <DigitalTransformation />
-        <Cybersecurity />
         <Skills />
-        <MarketAndDesign />
         <Projects />
         <Partners />
         <Experience />

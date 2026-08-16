@@ -70,6 +70,7 @@ export default function Services() {
           eyebrow={dict.services.eyebrow}
           title={dict.services.title}
           subtitle={dict.services.subtitle}
+          emphasize={lang === "fr" ? "déjà prouvé" : "already proven"}
         />
 
         <div className="mt-12 grid gap-4 sm:mt-16 sm:grid-cols-2 sm:gap-5 lg:grid-cols-6">

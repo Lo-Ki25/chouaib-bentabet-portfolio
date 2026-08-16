@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 type AmbientVideoProps = {
   src: string;
-  poster: string;
+  poster?: string;
   className?: string;
 };
 
@@ -41,6 +41,13 @@ export default function AmbientVideo({ src, poster, className }: AmbientVideoPro
     }
   }, [shouldPlay]);
 
+  const fallback = poster ? (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={poster} alt="" className="h-full w-full object-cover" />
+  ) : (
+    <div className="h-full w-full bg-base-900" />
+  );
+
   return (
     <div ref={ref} className={cn("pointer-events-none overflow-hidden", className)} aria-hidden>
       {inView && !prefersReducedMotion ? (
@@ -56,8 +63,7 @@ export default function AmbientVideo({ src, poster, className }: AmbientVideoPro
           <source src={src} type="video/mp4" />
         </video>
       ) : (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={poster} alt="" className="h-full w-full object-cover" />
+        fallback
       )}
     </div>
   );

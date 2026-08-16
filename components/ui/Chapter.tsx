@@ -70,20 +70,40 @@ export default function Chapter({
         </motion.h2>
 
         {body ? (
-          <p className="mt-5 max-w-2xl text-[15px] leading-relaxed text-white/80 sm:mt-6 sm:text-lg">
+          <motion.p
+            {...(canAnimate
+              ? {
+                  initial: { opacity: 0, y: 16 },
+                  animate: inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 },
+                  transition: { duration: 0.6, delay: 0.08, ease: [0.22, 1, 0.36, 1] as const },
+                }
+              : {})}
+            className="mt-5 max-w-2xl text-[15px] leading-relaxed text-white/80 sm:mt-6 sm:text-lg"
+          >
             {body}
-          </p>
+          </motion.p>
         ) : null}
 
         {pills && pills.length > 0 ? (
           <div className="mt-6 flex flex-wrap gap-2 sm:mt-8">
-            {pills.map((pill) => (
-              <span
+            {pills.map((pill, i) => (
+              <motion.span
                 key={pill}
+                {...(canAnimate
+                  ? {
+                      initial: { opacity: 0, y: 8 },
+                      animate: inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 },
+                      transition: {
+                        duration: 0.4,
+                        delay: 0.12 + i * 0.05,
+                        ease: [0.22, 1, 0.36, 1] as const,
+                      },
+                    }
+                  : {})}
                 className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-accent-100 sm:px-4"
               >
                 {pill}
-              </span>
+              </motion.span>
             ))}
           </div>
         ) : null}

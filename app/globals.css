@@ -97,11 +97,11 @@ textarea:focus-visible,
 /* Utility layer */
 @layer utilities {
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent-300 via-accent-500 to-cyan;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent-300 via-accent-500 to-cta;
   }
 
   .text-gradient-violet {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent-400 via-violet to-cyan;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent-400 via-violet to-cta;
   }
 
   .bg-grid {

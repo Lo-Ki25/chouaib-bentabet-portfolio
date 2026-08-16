@@ -8,7 +8,7 @@ type UseInViewportOptions = IntersectionObserverInit & {
 };
 
 /** Détecte quand un élément entre dans le viewport (IntersectionObserver). */
-export function useInViewport<T extends HTMLElement>(options?: UseInViewportOptions) {
+export function useInViewport<T extends HTMLElement = HTMLDivElement>(options?: UseInViewportOptions) {
   const ref = useRef<T>(null);
   const [inView, setInView] = useState(false);
   const once = options?.once ?? true;
